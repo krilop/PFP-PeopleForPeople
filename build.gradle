@@ -1,7 +1,15 @@
 plugins {
     id 'java'
+    id "org.sonarqube" version "4.4.1.3373"
 }
 
+sonar {
+    properties {
+        property "sonar.projectKey", "krilop_PFP-PeopleForPeople"
+        property "sonar.organization", "krilop"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
+}
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 
