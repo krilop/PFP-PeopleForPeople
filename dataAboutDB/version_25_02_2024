@@ -1,592 +1,191 @@
---
--- PostgreSQL database dump
---
 
--- Dumped from database version 15.6
--- Dumped by pg_dump version 15.4
-
--- Started on 2024-02-26 02:36:47 +03
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- TOC entry 234 (class 1259 OID 16541)
--- Name: authorization; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."authorization" (
-    id bigint NOT NULL,
-    email text NOT NULL,
-    login character varying(30) NOT NULL,
-    hash_of_pass text NOT NULL
+create table "authorization"
+(
+    id           bigint      not null
+        constraint authorization_pkey1
+            primary key,
+    email        text        not null,
+    login        varchar(30) not null,
+    hash_of_pass text        not null
 );
 
+alter table "authorization"
+    owner to postgres;
 
-ALTER TABLE public."authorization" OWNER TO postgres;
-
---
--- TOC entry 214 (class 1259 OID 16391)
--- Name: contact; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.contact (
-    id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    info text NOT NULL,
-    contact_type numeric(2,0) DEFAULT 1 NOT NULL
+create table contact
+(
+    id           bigint generated always as identity
+        constraint contacts_pkey
+            primary key,
+    user_id      bigint               not null
+        constraint fk_user_id
+            references "authorization",
+    info         text                 not null,
+    contact_type numeric(2) default 1 not null
 );
 
+alter table contact
+    owner to postgres;
 
-ALTER TABLE public.contact OWNER TO postgres;
 
---
--- TOC entry 224 (class 1259 OID 16489)
--- Name: contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.contact ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.contacts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
+create table event
+(
+    id             bigint generated always as identity
+        constraint events_pkey
+            primary key,
+    type_id        bigint          not null
+        constraint fk_type_id
+            references interest_type,
+    title          text            not null,
+    discription    text,
+    cost           money default 0 not null,
+    payment_method text            not null
 );
 
+alter table event
+    owner to postgres;
 
---
--- TOC entry 223 (class 1259 OID 16424)
--- Name: event; Type: TABLE; Schema: public; Owner: postgres
---
 
-CREATE TABLE public.event (
-    id bigint NOT NULL,
-    type_id bigint NOT NULL,
-    title text NOT NULL,
-    discription text,
-    cost money DEFAULT 0 NOT NULL,
-    payment_method text NOT NULL
+create table event_date
+(
+    id         bigint generated always as identity
+        constraint "eventsDates_pkey"
+            primary key,
+    event_id   bigint    not null
+        constraint fk_events_date
+            references event,
+    date_start timestamp not null,
+    date_end   timestamp not null
 );
 
+alter table event_date
+    owner to postgres;
 
-ALTER TABLE public.event OWNER TO postgres;
 
---
--- TOC entry 219 (class 1259 OID 16412)
--- Name: event_date; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.event_date (
-    id bigint NOT NULL,
-    event_id bigint NOT NULL,
-    date_start timestamp without time zone NOT NULL,
-    date_end timestamp without time zone NOT NULL
+create table event_geolocation
+(
+    id             bigint generated always as identity
+        constraint events_geolocation_pkey
+            primary key,
+    event_id       bigint not null
+        constraint fk_event_id
+            references event,
+    geolocation_id bigint not null
+        constraint fk_geolocation
+            references geolocation
 );
 
+alter table event_geolocation
+    owner to postgres;
 
-ALTER TABLE public.event_date OWNER TO postgres;
 
---
--- TOC entry 222 (class 1259 OID 16421)
--- Name: event_geolocation; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.event_geolocation (
-    id bigint NOT NULL,
-    event_id bigint NOT NULL,
-    geolocation_id bigint NOT NULL
+create table geolocation
+(
+    id      bigint generated always as identity
+        constraint geolocations_pkey
+            primary key,
+    title   text not null,
+    address json not null
 );
 
+alter table geolocation
+    owner to postgres;
 
-ALTER TABLE public.event_geolocation OWNER TO postgres;
+    
+    create table interest_type
+    (
+        id            smallint generated always as identity
+            constraint "interestType_pkey"
+                primary key,
+        title_of_type text not null
+    );
 
---
--- TOC entry 226 (class 1259 OID 16491)
--- Name: eventsDates_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
+    alter table interest_type
+        owner to postgres;
 
-ALTER TABLE public.event_date ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."eventsDates_id_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
+
+create table interest_type_user
+(
+    id          bigint generated always as identity
+        constraint "interestType_users_pkey"
+            primary key,
+    user_id     bigint   not null
+        constraint fk_user_id
+            references "authorization",
+    interest_id smallint not null
+        constraint fk_interest_id
+            references interest_type
 );
 
+alter table interest_type_user
+    owner to postgres;
 
---
--- TOC entry 227 (class 1259 OID 16492)
--- Name: events_geolocation_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
 
-ALTER TABLE public.event_geolocation ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.events_geolocation_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
+create table list_of_customers
+(
+    id       bigint generated always as identity
+        constraint "listOfCustomers_pkey"
+            primary key,
+    user_id  bigint not null
+        constraint fk_user_id
+            references "authorization",
+    event_id bigint not null
+        constraint fk_event_id
+            references event
 );
 
+alter table list_of_customers
+    owner to postgres;
 
---
--- TOC entry 225 (class 1259 OID 16490)
--- Name: events_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
 
-ALTER TABLE public.event ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.events_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
+create table relation
+(
+    id             bigint generated always as identity
+        constraint relations_pkey
+            primary key,
+    user_id        bigint   not null
+        constraint fk_user_id
+            references "authorization",
+    friend_id      bigint   not null
+        constraint fk_friend_id
+            references "authorization",
+    relation_title smallint not null
+        constraint relation_relation_type_key
+            unique
+        constraint fk_relations_type
+            references relation_type
 );
 
+alter table relation
+    owner to postgres;
 
---
--- TOC entry 221 (class 1259 OID 16418)
--- Name: geolocation; Type: TABLE; Schema: public; Owner: postgres
---
 
-CREATE TABLE public.geolocation (
-    id bigint NOT NULL,
-    title text NOT NULL,
-    address json NOT NULL
+create table relation_type
+(
+    id             smallint generated always as identity
+        constraint "relationType_pkey"
+            primary key,
+    relation_title text not null
 );
 
+alter table relation_type
+    owner to postgres;
 
-ALTER TABLE public.geolocation OWNER TO postgres;
 
---
--- TOC entry 228 (class 1259 OID 16493)
--- Name: geolocations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.geolocation ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.geolocations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
+create table user_data
+(
+    name          text       not null,
+    last_name     text       not null,
+    description   text,
+    date_of_birth timestamp  not null,
+    geolocation   text       not null,
+    media         json,
+    gender        numeric(1) not null,
+    user_id       bigint     not null
+        unique
+        references "authorization"
 );
 
-
---
--- TOC entry 218 (class 1259 OID 16409)
--- Name: interest_type; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.interest_type (
-    id smallint NOT NULL,
-    title_of_type text NOT NULL
-);
-
-
-ALTER TABLE public.interest_type OWNER TO postgres;
-
---
--- TOC entry 229 (class 1259 OID 16495)
--- Name: interestType_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.interest_type ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."interestType_id_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- TOC entry 217 (class 1259 OID 16406)
--- Name: interest_type_user; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.interest_type_user (
-    id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    interest_id smallint NOT NULL
-);
-
-
-ALTER TABLE public.interest_type_user OWNER TO postgres;
-
---
--- TOC entry 230 (class 1259 OID 16496)
--- Name: interestType_users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.interest_type_user ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."interestType_users_id_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- TOC entry 220 (class 1259 OID 16415)
--- Name: list_of_customers; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.list_of_customers (
-    id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    event_id bigint NOT NULL
-);
-
-
-ALTER TABLE public.list_of_customers OWNER TO postgres;
-
---
--- TOC entry 231 (class 1259 OID 16497)
--- Name: listOfCustomers_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.list_of_customers ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."listOfCustomers_id_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- TOC entry 215 (class 1259 OID 16400)
--- Name: relation; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.relation (
-    id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    friend_id bigint NOT NULL,
-    relation_title smallint NOT NULL
-);
-
-
-ALTER TABLE public.relation OWNER TO postgres;
-
---
--- TOC entry 216 (class 1259 OID 16403)
--- Name: relation_type; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.relation_type (
-    id smallint NOT NULL,
-    relation_title text NOT NULL
-);
-
-
-ALTER TABLE public.relation_type OWNER TO postgres;
-
---
--- TOC entry 232 (class 1259 OID 16498)
--- Name: relationType_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.relation_type ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public."relationType_id_seq"
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- TOC entry 233 (class 1259 OID 16499)
--- Name: relations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-ALTER TABLE public.relation ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME public.relations_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1
-);
-
-
---
--- TOC entry 235 (class 1259 OID 16549)
--- Name: user_data; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.user_data (
-    name text NOT NULL,
-    last_name text NOT NULL,
-    description text,
-    date_of_birth timestamp without time zone NOT NULL,
-    geolocation text NOT NULL,
-    media json,
-    gender numeric(1,0) NOT NULL,
-    user_id bigint NOT NULL
-);
-
-
-ALTER TABLE public.user_data OWNER TO postgres;
-
---
--- TOC entry 4284 (class 2606 OID 16547)
--- Name: authorization authorization_pkey1; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."authorization"
-    ADD CONSTRAINT authorization_pkey1 PRIMARY KEY (id);
-
-
---
--- TOC entry 4262 (class 2606 OID 16434)
--- Name: contact contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.contact
-    ADD CONSTRAINT contacts_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 4274 (class 2606 OID 16441)
--- Name: event_date eventsDates_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.event_date
-    ADD CONSTRAINT "eventsDates_pkey" PRIMARY KEY (id);
-
-
---
--- TOC entry 4280 (class 2606 OID 16443)
--- Name: event_geolocation events_geolocation_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.event_geolocation
-    ADD CONSTRAINT events_geolocation_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 4282 (class 2606 OID 16439)
--- Name: event events_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.event
-    ADD CONSTRAINT events_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 4278 (class 2606 OID 16447)
--- Name: geolocation geolocations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.geolocation
-    ADD CONSTRAINT geolocations_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 4272 (class 2606 OID 16455)
--- Name: interest_type interestType_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.interest_type
-    ADD CONSTRAINT "interestType_pkey" PRIMARY KEY (id);
-
-
---
--- TOC entry 4270 (class 2606 OID 16453)
--- Name: interest_type_user interestType_users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.interest_type_user
-    ADD CONSTRAINT "interestType_users_pkey" PRIMARY KEY (id);
-
-
---
--- TOC entry 4276 (class 2606 OID 16463)
--- Name: list_of_customers listOfCustomers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.list_of_customers
-    ADD CONSTRAINT "listOfCustomers_pkey" PRIMARY KEY (id);
-
-
---
--- TOC entry 4268 (class 2606 OID 16467)
--- Name: relation_type relationType_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.relation_type
-    ADD CONSTRAINT "relationType_pkey" PRIMARY KEY (id);
-
-
---
--- TOC entry 4264 (class 2606 OID 16599)
--- Name: relation relation_relation_type_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.relation
-    ADD CONSTRAINT relation_relation_type_key UNIQUE (relation_title);
-
-
---
--- TOC entry 4266 (class 2606 OID 16469)
--- Name: relation relations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.relation
-    ADD CONSTRAINT relations_pkey PRIMARY KEY (id);
-
-
---
--- TOC entry 4286 (class 2606 OID 16562)
--- Name: user_data user_data_user_id_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.user_data
-    ADD CONSTRAINT user_data_user_id_key UNIQUE (user_id);
-
-
---
--- TOC entry 4296 (class 2606 OID 16517)
--- Name: event_geolocation fk_event_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.event_geolocation
-    ADD CONSTRAINT fk_event_id FOREIGN KEY (event_id) REFERENCES public.event(id) NOT VALID;
-
-
---
--- TOC entry 4294 (class 2606 OID 16568)
--- Name: list_of_customers fk_event_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.list_of_customers
-    ADD CONSTRAINT fk_event_id FOREIGN KEY (event_id) REFERENCES public.event(id) NOT VALID;
-
-
---
--- TOC entry 4293 (class 2606 OID 16563)
--- Name: event_date fk_events_date; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.event_date
-    ADD CONSTRAINT fk_events_date FOREIGN KEY (event_id) REFERENCES public.event(id) NOT VALID;
-
-
---
--- TOC entry 4288 (class 2606 OID 16593)
--- Name: relation fk_friend_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.relation
-    ADD CONSTRAINT fk_friend_id FOREIGN KEY (friend_id) REFERENCES public."authorization"(id) NOT VALID;
-
-
---
--- TOC entry 4297 (class 2606 OID 16512)
--- Name: event_geolocation fk_geolocation; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.event_geolocation
-    ADD CONSTRAINT fk_geolocation FOREIGN KEY (geolocation_id) REFERENCES public.geolocation(id) NOT VALID;
-
-
---
--- TOC entry 4291 (class 2606 OID 16583)
--- Name: interest_type_user fk_interest_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.interest_type_user
-    ADD CONSTRAINT fk_interest_id FOREIGN KEY (interest_id) REFERENCES public.interest_type(id) NOT VALID;
-
-
---
--- TOC entry 4289 (class 2606 OID 16522)
--- Name: relation fk_relations_type; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.relation
-    ADD CONSTRAINT fk_relations_type FOREIGN KEY (relation_title) REFERENCES public.relation_type(id) NOT VALID;
-
-
---
--- TOC entry 4298 (class 2606 OID 16507)
--- Name: event fk_type_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.event
-    ADD CONSTRAINT fk_type_id FOREIGN KEY (type_id) REFERENCES public.interest_type(id) NOT VALID;
-
-
---
--- TOC entry 4295 (class 2606 OID 16573)
--- Name: list_of_customers fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.list_of_customers
-    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public."authorization"(id) NOT VALID;
-
-
---
--- TOC entry 4292 (class 2606 OID 16578)
--- Name: interest_type_user fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.interest_type_user
-    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public."authorization"(id) NOT VALID;
-
-
---
--- TOC entry 4290 (class 2606 OID 16588)
--- Name: relation fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.relation
-    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public."authorization"(id) NOT VALID;
-
-
---
--- TOC entry 4287 (class 2606 OID 16600)
--- Name: contact fk_user_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.contact
-    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES public."authorization"(id) NOT VALID;
-
-
---
--- TOC entry 4299 (class 2606 OID 16556)
--- Name: user_data user_data_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.user_data
-    ADD CONSTRAINT user_data_user_id_fkey FOREIGN KEY (user_id) REFERENCES public."authorization"(id) NOT VALID;
-
-
--- Completed on 2024-02-26 02:36:47 +03
-
---
--- PostgreSQL database dump complete
---
+alter table user_data
+    owner to postgres;
 

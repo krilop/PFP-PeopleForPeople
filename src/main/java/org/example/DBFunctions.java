@@ -17,6 +17,7 @@ public class DBFunctions {
         catch (Exception e)
         {
             System.out.println("Cannot connect to Database!");
+            System.out.println(e);
         }
         return conn;
     }
