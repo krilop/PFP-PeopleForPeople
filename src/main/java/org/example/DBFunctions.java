@@ -10,7 +10,6 @@ public class DBFunctions {
     public Connection connectToDB(String dbname, String user, String password){
         Connection conn = null;
         try{
-         //   Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/"+dbname,user,password);
             logger.info("Successfully connect!");
         }
