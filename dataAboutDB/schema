@@ -1,193 +1,123 @@
-address: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = geolocations_id_seq
-        title: text NN
-        address: json NN
-    + indices
-        pk_address: unique (id)
-    + keys
-        pk_address: PK (id)
-authorization: table
-    + columns
-        id: bigint NN
-        email: text NN
-        login: varchar(30) NN
-        hash_of_pass: text NN
-    + indices
-        pk_authorization: unique (id)
-    + keys
-        pk_authorization: PK (id)
-contact: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = contacts_id_seq
-        user_id: bigint NN
-        info: text NN
-        contact_type: numeric(2) NN default 1
-    + indices
-        pk_contact: unique (id)
-    + keys
-        pk_contact: PK (id)
-    + foreign-keys
-        fk_user_id: foreign key (user_id) -> authorization[.pk_authorization] (id)
-contact_type: table
-    + columns
-        id: bigint NN
-        contact_title: text NN
-    + indices
-        pk_contact_type_id: unique (id)
-        unique_contact_type: unique (contact_title)
-    + keys
-        pk_contact_type_id: PK (id)
-        unique_contact_type: AK (contact_title)
-event: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = events_id_seq
-        type_id: bigint NN
-        title: text NN
-        discription: text
-        cost: money NN default 0
-        payment_method: text NN
-    + indices
-        pk_event: unique (id)
-    + keys
-        pk_event: PK (id)
-    + foreign-keys
-        fk_type_id: foreign key (type_id) -> interest_type[.pk_interest_type] (id)
-event_address: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = events_geolocation_id_seq
-        event_id: bigint NN
-        address_id: bigint NN
-    + indices
-        pk_event_address: unique (id)
-    + keys
-        pk_event_address: PK (id)
-    + foreign-keys
-        fk_event_id: foreign key (event_id) -> event[.pk_event] (id)
-        fk_address: foreign key (address_id) -> address[.pk_address] (id)
-event_date: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = eventsDates_id_seq
-        event_id: bigint NN
-        date_start: timestamp NN
-        date_end: timestamp NN
-    + indices
-        pk_event_date: unique (id)
-    + keys
-        pk_event_date: PK (id)
-    + foreign-keys
-        fk_event_date: foreign key (event_id) -> event[.pk_event] (id)
-interest_type: table
-    + columns
-        id: smallint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = interestType_id_seq
-        title_of_type: text NN
-    + indices
-        pk_interest_type: unique (id)
-        unique: unique (title_of_type)
-    + keys
-        pk_interest_type: PK (id)
-        unique: AK (title_of_type)
-interest_type_user: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = interestType_users_id_seq
-        user_id: bigint NN
-        interest_id: smallint NN
-    + indices
-        pk_interest_type_user: unique (id)
-    + keys
-        pk_interest_type_user: PK (id)
-    + foreign-keys
-        fk_user_id: foreign key (user_id) -> authorization[.pk_authorization] (id)
-        fk_interest_id: foreign key (interest_id) -> interest_type[.pk_interest_type] (id)
-list_of_customers: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = listOfCustomers_id_seq
-        user_id: bigint NN
-        event_id: bigint NN
-    + indices
-        pk_list_of_customers: unique (id)
-    + keys
-        pk_list_of_customers: PK (id)
-    + foreign-keys
-        fk_user_id: foreign key (user_id) -> authorization[.pk_authorization] (id)
-        fk_event_id: foreign key (event_id) -> event[.pk_event] (id)
-relation: table
-    + columns
-        id: bigint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = relations_id_seq
-        user_id: bigint NN
-        friend_id: bigint NN
-        relation_type: smallint NN
-    + indices
-        pk_relation: unique (id)
-    + keys
-        pk_relation: PK (id)
-    + foreign-keys
-        fk_user_id: foreign key (user_id) -> authorization[.pk_authorization] (id)
-        fk_friend_id: foreign key (friend_id) -> authorization[.pk_authorization] (id)
-        fk_relation_type: foreign key (relation_type) -> relation_type[.pk_relation_type] (id)
-relation_type: table
-    + columns
-        id: smallint NN identity 1
-            . properties
-                identity_kind = ALWAYS
-            . references
-                sequence = relationType_id_seq
-        relation_title: text NN
-    + indices
-        pk_relation_type: unique (id)
-        unique_relation_title: unique (relation_title)
-    + keys
-        pk_relation_type: PK (id)
-        unique_relation_title: AK (relation_title)
-user_data: table
-    + columns
-        name: text NN
-        last_name: text NN
-        description: text
-        date_of_birth: timestamp NN
-        geolocation: text NN
-        media: json
-        gender: numeric(1) NN
-        user_id: bigint NN
-    + indices
-        #1: unique (user_id)
-    + keys
-        #1: AK (user_id) (underlying index #1)
-    + foreign-keys
-        fk_user_data_user_id: foreign key (user_id) -> authorization[.pk_authorization] (id)
+create table public."authorization"
+(
+    id           bigint generated always as identity
+        constraint pk_authorization_id
+            primary key,
+    email        text        not null,
+    login        varchar(30) not null,
+    hash_of_pass text        not null
+);
+
+alter table public."authorization"
+    owner to postgres;
+
+create table public.contact
+(
+    id           bigint generated always as identity
+        constraint pk_contact_id
+            primary key,
+    user_id      bigint           not null
+        constraint fk_user_id
+            references public."authorization",
+    info         text             not null,
+    contact_type bigint default 1 not null
+);
+
+alter table public.contact
+    owner to postgres;
+
+create table public.interest_type
+(
+    id            bigint generated always as identity
+        constraint pk_interest_type_id
+            primary key,
+    title_of_type text not null
+        constraint unique_title_of_type
+            unique
+);
+
+alter table public.interest_type
+    owner to postgres;
+
+create table public.interest_type_user
+(
+    id          bigint generated always as identity
+        constraint pk_interest_type_user_id
+            primary key,
+    user_id     bigint   not null
+        constraint fk_user_id
+            references public."authorization",
+    interest_id smallint not null
+        constraint fk_interest_id
+            references public.interest_type
+);
+
+alter table public.interest_type_user
+    owner to postgres;
+
+create table public.relation_type
+(
+    id             bigint generated always as identity
+        constraint pk_relation_type_id
+            primary key,
+    relation_title text not null
+        constraint unique_relation_title
+            unique
+);
+
+alter table public.relation_type
+    owner to postgres;
+
+create table public.relation
+(
+    id            bigint generated always as identity
+        constraint pk_relation_id
+            primary key,
+    user_id       bigint not null
+        constraint fk_user_id
+            references public."authorization",
+    friend_id     bigint not null
+        constraint fk_friend_id
+            references public."authorization",
+    relation_type bigint not null
+        constraint fk_relation_type
+            references public.relation_type
+);
+
+alter table public.relation
+    owner to postgres;
+
+create table public.user_data
+(
+    name          text       not null,
+    last_name     text       not null,
+    description   text,
+    date_of_birth timestamp  not null,
+    geolocation   text       not null,
+    media         json,
+    gender        numeric(1) not null,
+    user_id       bigint     not null
+        constraint pk_user_data_user_id
+            primary key
+        constraint unique_user_id
+            unique
+        constraint fk_user_id
+            references public."authorization"
+);
+
+alter table public.user_data
+    owner to postgres;
+
+create table public.contact_type
+(
+    id            bigint not null
+        constraint pk_contact_type_id
+            primary key,
+    contact_title text   not null
+        constraint unique_contact_title
+            unique
+);
+
+alter table public.contact_type
+    owner to postgres;
+
