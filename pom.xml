@@ -55,22 +55,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.1.2184</version>
-            </plugin>
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>sonar</id>
-            <properties>
-                <sonar.projectKey>krilop_PFP-PeopleForPeople</sonar.projectKey>
-                <sonar.organization>krilop</sonar.organization>
-                <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-            </properties>
-        </profile>
-    </profiles>
 </project>
