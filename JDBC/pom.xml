@@ -5,16 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>PFP-PeopleForPeople</artifactId>
+    <artifactId>JDBC</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>JDBC</module>
-        <module>jsp</module>
-        <module>backend</module>
-        <module>react</module>
-        <module>angular</module>
-    </modules>
+
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
