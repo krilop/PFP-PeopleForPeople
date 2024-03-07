@@ -10,16 +10,13 @@
     <packaging>pom</packaging>
     <modules>
         <module>JDBC</module>
-        <module>jsp</module>
-        <module>backend</module>
-        <module>react</module>
-        <module>angular</module>
     </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.projectkey>krilop_PFP-PeopleForPeople</sonar.projectkey>
         <sonar.organization>krilop</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
