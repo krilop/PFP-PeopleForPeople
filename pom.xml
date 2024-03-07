@@ -10,10 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>JDBC</module>
-        <module>jsp</module>
-        <module>backend</module>
-        <module>react</module>
-        <module>angular</module>
     </modules>
 
     <properties>
