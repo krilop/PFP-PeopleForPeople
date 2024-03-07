@@ -1,7 +1,7 @@
 # PFP-PeopleForPeople
 Цель проекта - создание веб-приложения сайта для знакомств.
 
-[Прилагаю ссылку на Sonar Cloud.](https://sonarcloud.io/project/overview?id=krilop_PFP-PeopleForPeople)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=krilop_PFP-PeopleForPeople&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=krilop_PFP-PeopleForPeople)
 
 | Этап                              | Описание                                                                                   | План (часов) | Факт (часов) |
 |-----------------------------------|--------------------------------------------------------------------------------------------|--------------|--------------|
