@@ -9,5 +9,6 @@ public class Main {
 
         DBFunctions db = new DBFunctions();
         db.connectToDB("PFP","krimlad","krilop");
+
     }
 }
