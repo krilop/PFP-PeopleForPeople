@@ -40,5 +40,20 @@ public class CRUDContact {
             }
         } while (true);
     }
+    public static void createUser() {
+        // Ваша реализация метода
+    }
+
+    public static void getAllUsers() {
+        // Ваша реализация метода
+    }
+
+    public static void updateUser() {
+        // Ваша реализация метода
+    }
+
+    public static void deleteUser() {
+        // Ваша реализация метода
+    }
 
 }
