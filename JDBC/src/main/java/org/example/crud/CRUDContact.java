@@ -1,17 +1,44 @@
 package org.example.crud;
 
 import lombok.Data;
-@Data
-public class CRUDContact {
-    Long id;
-    Long user_id;
-    Long contact_type;
-    String info;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-    public CRUDContact(Long id, Long user_id, Long contact_type, String info) {
-        this.id = id;
-        this.user_id = user_id;
-        this.contact_type = contact_type;
-        this.info = info;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.SQLException;
+
+public class CRUDContact {
+    private CRUDContact() {
+        throw new IllegalStateException("Utility class");
     }
+
+    private static final Logger logger = LogManager.getLogger(CRUDAuthorization.class);
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    public static void crudContact() throws IOException, SQLException {
+        String caseTable;
+        do {
+            logger.info("%n\t\t\t--------- SELECT OPERATION --------\n" +
+                    "\t1 - Create\n" +
+                    "\t2 - Read\n" +
+                    "\t3 - Update\n" +
+                    "\t4 - Delete\n" +
+                    "\tAnother - cancel\n" +
+                    "\tEnter num:");
+            caseTable = br.readLine();
+            switch (caseTable) {
+                case "1" -> createUser();
+                case "2" -> getAllUsers();
+                case "3" -> updateUser();
+                case "4" -> deleteUser();
+                default -> {
+                    logger.info("Exit");
+                    return;
+                }
+            }
+        } while (true);
+    }
+
 }

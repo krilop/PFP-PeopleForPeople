@@ -4,14 +4,14 @@ import lombok.Data;
 @Data
 public class Contact {
     Long id;
-    Long user_id;
-    Long contact_type;
+    Long userId;
+    Long contactType;
     String info;
 
-    public Contact(Long id, Long user_id, Long contact_type, String info) {
+    public Contact(Long id, Long userId, Long contactType, String info) {
         this.id = id;
-        this.user_id = user_id;
-        this.contact_type = contact_type;
+        this.userId = userId;
+        this.contactType = contactType;
         this.info = info;
     }
 }

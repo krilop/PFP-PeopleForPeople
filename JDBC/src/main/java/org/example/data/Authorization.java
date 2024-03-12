@@ -6,13 +6,13 @@ public class Authorization {
 
     Long id;
     String login;
-    String hash_of_pass;
+    String hashOfPass;
     String email;
 
-    public Authorization(Long id, String login, String hash_of_pass, String email) {
+    public Authorization(Long id, String login, String hashOfPass, String email) {
         this.id = id;
         this.login = login;
-        this.hash_of_pass = hash_of_pass;
+        this.hashOfPass = hashOfPass;
         this.email = email;
     }
 }
