@@ -1,6 +1,5 @@
 package org.example.crud;
 
-import lombok.Data;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +13,7 @@ public class CRUDContact {
         throw new IllegalStateException("Utility class");
     }
 
-    private static final Logger logger = LogManager.getLogger(CRUDAuthorization.class);
+    private static final Logger logger = LogManager.getLogger(CRUDContact.class);
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public static void crudContact() throws IOException, SQLException {

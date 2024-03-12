@@ -165,7 +165,6 @@ public class CRUDAuthorization {
         Authorization user = null;
         DBFunctions db = new DBFunctions();
         Connection conn = null;
-        Statement st = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
@@ -188,13 +187,6 @@ public class CRUDAuthorization {
             if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException e) {
-                    logger.error(e);
-                }
-            }
-            if (st != null) {
-                try {
-                    st.close();
                 } catch (SQLException e) {
                     logger.error(e);
                 }
