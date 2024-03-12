@@ -280,9 +280,10 @@ public class CRUDAuthorization {
     public static int dbDeleteUser(Long userID) {
         int status = 0;
         DBFunctions db = new DBFunctions();
-        Connection conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
+        Connection conn = null;
         PreparedStatement ps = null;
         try {
+            conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
             ps = conn.prepareStatement("DELETE FROM \"authorization\" where id=?");
             ps.setLong(1, userID);
             status = ps.executeUpdate();
