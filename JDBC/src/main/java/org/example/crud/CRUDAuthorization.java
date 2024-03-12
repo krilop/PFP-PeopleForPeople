@@ -29,11 +29,12 @@ public class CRUDAuthorization {
     public static void crudAuthorization() throws IOException, SQLException {
         String caseTable;
         do {
-            logger.info("%n\t\t\t--------- SELECT OPERATION --------\n" +
+            logger.info("\t\t\t--------- SELECT OPERATION --------\n" +
                     "\t1 - Create\n" +
                     "\t2 - Read\n" +
                     "\t3 - Update\n" +
                     "\t4 - Delete\n" +
+                    "\t5 - Get user by id\n"+
                     "\tAnother - cancel\n" +
                     "\tEnter num:");
             caseTable = br.readLine();
@@ -42,6 +43,12 @@ public class CRUDAuthorization {
                 case "2" -> getAllUsers();
                 case "3" -> updateUser();
                 case "4" -> deleteUser();
+                case "5" ->
+                {
+                    logger.info("Enter id:");
+                    Long id = Long.parseLong(br.readLine());
+                    showUser(dbGetUserByID(id));
+                }
                 default -> {
                     logger.info("Exit");
                     return;
