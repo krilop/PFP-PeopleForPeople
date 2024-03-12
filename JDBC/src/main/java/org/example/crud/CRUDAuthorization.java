@@ -98,9 +98,17 @@ public class CRUDAuthorization {
         Long id = Long.valueOf(br.readLine());
         logger.info("New email: ");
         String newEmail = br.readLine();
-
+        logger.info("New login: ");
+        String newLogin = br.readLine();
+        logger.info("New password: ");
+        String newPass = br.readLine();
         Authorization user = dbGetUserByID(id);
         user.setEmail(newEmail);
+        user.setLogin(newLogin);
+
+        user.setHashOfPass(Hashing.sha256()
+                .hashString(newPass, StandardCharsets.UTF_8)
+                .toString());
         int status = dbUpdateUser(user);
         if (status == 1) logger.info("User updated successfully");
         else
@@ -259,9 +267,11 @@ public class CRUDAuthorization {
         PreparedStatement ps = null;
         try {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
-            ps = conn.prepareStatement("UPDATE \"authorization\" SET email=? WHERE id=?");
+            ps = conn.prepareStatement("UPDATE \"authorization\" SET email=?, hash_of_pass=?, login=? WHERE id=?");
             ps.setString(1, user.getEmail());
-            ps.setLong(2, user.getId());
+            ps.setString(2,user.getHashOfPass());
+            ps.setString(3,user.getLogin());
+            ps.setLong(4, user.getId());
             status = ps.executeUpdate();
         } catch (SQLException e) {
             throw new IllegalStateException(e);

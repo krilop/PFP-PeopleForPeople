@@ -85,9 +85,14 @@ public class CRUDContact {
         Long id = Long.valueOf(br.readLine());
         logger.info("New info: ");
         String newInfo = br.readLine();
-
+        logger.info("New user_id: ");
+        String newUserId = br.readLine();
+        logger.info("New contact_type: ");
+        String newType = br.readLine();
         Contact co = dbGetContactByID(id);
         co.setInfo(newInfo);
+        co.setContactType(Long.parseLong(newType));
+        co.setUserId(Long.parseLong(newUserId));
         int status = dbUpdateContact(co);
         if (status == 1) logger.info("Contact updated successfully");
         else
@@ -248,9 +253,11 @@ public class CRUDContact {
         PreparedStatement ps = null;
         try {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
-            ps = conn.prepareStatement("UPDATE contact SET info=? WHERE id=?");
+            ps = conn.prepareStatement("UPDATE contact SET info=?, user_id=?, contact_type=? WHERE id=?");
             ps.setString(1, in.getInfo());
-            ps.setLong(2, in.getId());
+            ps.setLong(2,in.getUserId());
+            ps.setLong(3,in.getContactType());
+            ps.setLong(4, in.getId());
             status = ps.executeUpdate();
         } catch (SQLException e) {
             throw new IllegalStateException(e);
