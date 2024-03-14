@@ -1,4 +1,4 @@
-create table public."authorization"
+create table if not exists public."authorization"
 (
     id           bigint generated always as identity
         constraint pk_authorization_id
@@ -11,22 +11,7 @@ create table public."authorization"
 alter table public."authorization"
     owner to postgres;
 
-create table public.contact
-(
-    id           bigint generated always as identity
-        constraint pk_contact_id
-            primary key,
-    user_id      bigint           not null
-        constraint fk_user_id
-            references public."authorization",
-    info         text             not null,
-    contact_type bigint default 1 not null
-);
-
-alter table public.contact
-    owner to postgres;
-
-create table public.interest_type
+create table if not exists public.interest_type
 (
     id            bigint generated always as identity
         constraint pk_interest_type_id
@@ -39,23 +24,23 @@ create table public.interest_type
 alter table public.interest_type
     owner to postgres;
 
-create table public.interest_type_user
+create table if not exists public.interest_type_user
 (
     id          bigint generated always as identity
         constraint pk_interest_type_user_id
             primary key,
     user_id     bigint   not null
-        constraint fk_user_id
+        constraint authorization_id
             references public."authorization",
     interest_id smallint not null
-        constraint fk_interest_id
+        constraint interest_type_id
             references public.interest_type
 );
 
 alter table public.interest_type_user
     owner to postgres;
 
-create table public.relation_type
+create table if not exists public.relation_type
 (
     id             bigint generated always as identity
         constraint pk_relation_type_id
@@ -68,26 +53,26 @@ create table public.relation_type
 alter table public.relation_type
     owner to postgres;
 
-create table public.relation
+create table if not exists public.relation
 (
     id            bigint generated always as identity
         constraint pk_relation_id
             primary key,
     user_id       bigint not null
-        constraint fk_user_id
+        constraint authorization_id_2
             references public."authorization",
     friend_id     bigint not null
-        constraint fk_friend_id
+        constraint authorization_id
             references public."authorization",
     relation_type bigint not null
-        constraint fk_relation_type
+        constraint relation_type_id
             references public.relation_type
 );
 
 alter table public.relation
     owner to postgres;
 
-create table public.user_data
+create table if not exists public.user_data
 (
     name          text       not null,
     last_name     text       not null,
@@ -101,14 +86,14 @@ create table public.user_data
             primary key
         constraint unique_user_id
             unique
-        constraint fk_user_id
+        constraint authorization_id
             references public."authorization"
 );
 
 alter table public.user_data
     owner to postgres;
 
-create table public.contact_type
+create table if not exists public.contact_type
 (
     id            bigint not null
         constraint pk_contact_type_id
@@ -119,5 +104,22 @@ create table public.contact_type
 );
 
 alter table public.contact_type
+    owner to postgres;
+
+create table if not exists public.contact
+(
+    id           bigint generated always as identity
+        constraint pk_contact_id
+            primary key,
+    user_id      bigint           not null
+        constraint authorization_id
+            references public."authorization",
+    info         text             not null,
+    contact_type bigint default 1 not null
+        constraint contact_type_id
+            references public.contact_type
+);
+
+alter table public.contact
     owner to postgres;
 
