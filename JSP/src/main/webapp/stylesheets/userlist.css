@@ -1,0 +1,11 @@
+.user-info {
+    width: 80vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-left: 10%;
+    margin-right: 10%
+}
+a{
+    margin-top: 0;
+}
