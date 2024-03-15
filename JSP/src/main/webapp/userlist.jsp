@@ -19,7 +19,11 @@
 <div class="user-info">
     <p>Login: <%= user.getLogin() %></p>
     <p>Email: <%= user.getEmail() %></p>
-    <a href="profile.jsp?id=<%=user.getId()%>">Подробнее</a>
+    <div>
+        <a href="profile.jsp?id=<%=user.getId()%>">Подробнее</a>
+        <a href="friends.jsp&id=<%=user.getId()%>">Просмотреть друзей</a>
+    </div>
+
 </div>
 <% } %>
 </body>
