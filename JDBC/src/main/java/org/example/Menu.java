@@ -1,14 +1,15 @@
 package org.example;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.example.crud.CRUDAuthorization;
+import org.example.crud.CRUDContact;
+import org.example.crud.CRUDRelation;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-
-import org.example.crud.*;
 public class Menu {
 
     private Menu()
@@ -24,6 +25,7 @@ public class Menu {
             logger.info("\n\t\t\t--------- SELECT TABLE --------" +
                     "\n\t1 - Authorization" +
                     "\n\t2 - Contact" +
+                    "\n\t3 - Relation" +
                     "\n\tAnother - cancel operation" +
                     "\n\tEnter num:\n");
 
@@ -33,6 +35,8 @@ public class Menu {
                         CRUDAuthorization.crudAuthorization();
                 case "2" ->
                         CRUDContact.crudContact();
+                case "3" ->
+                        CRUDRelation.crudRelation();
                 default -> {
                     logger.info("Exit");
                     return;

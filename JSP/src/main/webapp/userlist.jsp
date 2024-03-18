@@ -15,12 +15,17 @@
 <%
     List<Authorization> users = CRUDAuthorization.dbGetAllUsers();
     for (Authorization user: users) {
+        if(user.getId()!= Long.parseLong(request.getParameter("id"))){
 %>
 <div class="user-info">
     <p>Login: <%= user.getLogin() %></p>
     <p>Email: <%= user.getEmail() %></p>
-    <a href="profile.jsp?id=<%=user.getId()%>">Подробнее</a>
+    <a href="profile.jsp?check=<%=user.getId()%>&id=<%= request.getParameter("id") %>">Подробнее</a>
+    <a href="friends.jsp?check=<%=user.getId()%>&id=<%= request.getParameter("id") %>">Просмотреть друзей</a>
+    <a href="addfriend.jsp?id=<%= request.getParameter("id") %>&friendId=<%= user.getId() %>">Добавить в друзья</a>
+
+
 </div>
-<% } %>
+<% }} %>
 </body>
 </html>

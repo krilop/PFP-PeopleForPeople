@@ -20,7 +20,7 @@
 </head>
 <body>
 <%
-    Authorization user = CRUDAuthorization.dbGetUserByID(Long.parseLong(request.getParameter("id")));
+    Authorization user = CRUDAuthorization.dbGetUserByID(Long.parseLong(request.getParameter("check")));
 %>
 <h1><%= "List of available contact for user:"+user.getLogin()%></h1>
 <%

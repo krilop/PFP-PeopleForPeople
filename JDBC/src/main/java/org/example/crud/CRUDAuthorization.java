@@ -47,7 +47,11 @@ public class CRUDAuthorization {
                 {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
+                    Authorization user = dbGetUserByID(id);
+                    if(user!=null)
                     showUser(dbGetUserByID(id));
+                    else
+                        logger.error("user doesn't exist");
                 }
                 default -> {
                     logger.info("Exit");
@@ -66,6 +70,21 @@ public class CRUDAuthorization {
         String password = br.readLine();
         logger.info("Enter email");
         String email = br.readLine();
+        String sha256hex = Hashing.sha256()
+                .hashString(password, StandardCharsets.UTF_8)
+                .toString();
+        Authorization user = new Authorization(0L, login, sha256hex, email);
+        int status = dbSaveUser(user);
+
+        if (status == 1)
+            logger.info("User saved successfully");
+        else
+            logger.info("ERROR while saving user");
+        logger.info("\n");
+    }
+    public static void createUser(String login, String password, String email) throws SQLException {
+
+
         String sha256hex = Hashing.sha256()
                 .hashString(password, StandardCharsets.UTF_8)
                 .toString();
@@ -139,9 +158,9 @@ public class CRUDAuthorization {
             while (rs.next()) {
                 Authorization user = new Authorization(
                         rs.getLong("id"),
-                        rs.getString("email"),
+                        rs.getString("login"),
                         rs.getString("hash_of_pass"),
-                        rs.getString("login")
+                        rs.getString("email")
                 );
                 users.add(user);
             }
@@ -225,6 +244,55 @@ public class CRUDAuthorization {
         }
         return user;
     }
+    public static Authorization dbGetUserByName(String name) {
+        Authorization user = null;
+        DBFunctions db = new DBFunctions();
+        Connection conn = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        try {
+            conn = db.connectToDB("PFP", "krimlad", "krilop");
+            ps = conn.prepareStatement("SELECT * FROM \"authorization\" WHERE login = ?");
+            ps.setString(1, name);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                user = new Authorization(rs.getLong("id"),
+                        rs.getString("email"),
+                        rs.getString("hash_of_pass"),
+                        rs.getString("login"));
+
+            }
+
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    logger.error(e);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    // Обработка исключения при закрытии ResultSet
+                    logger.error(e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    logger.error(e);
+                }
+
+            }
+        }
+        return user;
+    }
 
     public static int dbSaveUser(Authorization user) throws SQLException {
 
@@ -235,9 +303,9 @@ public class CRUDAuthorization {
         try {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
             ps = conn.prepareStatement("INSERT INTO \"authorization\"(email, hash_of_pass, login) VALUES(?, ?, ?)");
-            ps.setString(3, user.getEmail());
+            ps.setString(1, user.getEmail());
             ps.setString(2, user.getHashOfPass());
-            ps.setString(1, user.getLogin());
+            ps.setString(3, user.getLogin());
             status = ps.executeUpdate();
         } catch (SQLException e) {
             throw new IllegalStateException(e);

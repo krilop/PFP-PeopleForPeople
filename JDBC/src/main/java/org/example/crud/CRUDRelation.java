@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.DBFunctions;
 import org.example.data.Constants;
-import org.example.data.Contact;
+import org.example.data.Relation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,15 +13,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CRUDContact {
-    private CRUDContact() {
+public class CRUDRelation {
+    private CRUDRelation() {
         throw new IllegalStateException("Utility class");
     }
 
-    private static final Logger logger = LogManager.getLogger(CRUDContact.class);
+    private static final Logger logger = LogManager.getLogger(CRUDRelation.class);
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void crudContact() throws IOException, SQLException {
+    public static void crudRelation() throws IOException, SQLException {
         String caseTable;
         do {
             logger.info("\t\t\t--------- SELECT OPERATION --------\n" +
@@ -29,24 +29,19 @@ public class CRUDContact {
                     "\t2 - Read\n" +
                     "\t3 - Update\n" +
                     "\t4 - Delete\n" +
-                    "\t5 - Read contact by id\n" +
+                    "\t5 - Read relation by id\n" +
                     "\tAnother - cancel\n" +
                     "\tEnter num:");
             caseTable = br.readLine();
             switch (caseTable) {
-                case "1" -> createContact();
-                case "2" -> getAllContact();
-                case "3" -> updateContact();
-                case "4" -> deleteContact();
-                case "5" ->
-                {
+                case "1" -> createRelation();
+                case "2" -> getAllRelations();
+                case "3" -> updateRelation();
+                case "4" -> deleteRelation();
+                case "5" -> {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
-                    Contact conn =dbGetContactByID(id);
-                    if(conn!=null)
-                    showContact(conn);
-                    else
-                        logger.error("contact doesn't exist");
+                    showRelation(dbGetRelationByID(id));
                 }
                 default -> {
                     logger.info("Exit");
@@ -55,64 +50,65 @@ public class CRUDContact {
             }
         } while (true);
     }
-    public static void createContact() throws IOException, SQLException{
+
+    public static void createRelation() throws IOException, SQLException {
         // Ваша реализация метода
         logger.info("Enter user_id:");
         String userId = br.readLine();
         logger.info("Enter contact_type:");
-        String contactType = br.readLine();
-        logger.info("Enter info");
-        String info = br.readLine();
-        Contact co = new Contact(0L, Long.parseLong(userId), Long.parseLong(contactType), info);
-        int status = dbSaveContact(co);
+        String friendId = br.readLine();
+        logger.info("Enter relation_type:");
+        String relationType = br.readLine();
+        Relation rel = new Relation(0L, Long.parseLong(userId), Long.parseLong(friendId), Long.parseLong(relationType));
+        int status = dbSaveRelation(rel);
 
         if (status == 1)
-            logger.info("Contact saved successfully");
+            logger.info("Relation saved successfully");
         else
-            logger.info("ERROR while saving user");
+            logger.info("ERROR while saving relation");
         logger.info("\n");
     }
 
-    public static void getAllContact() {
-        List<Contact> list = dbGetAllContacts();
-        for (Contact co : list) {
-            showContact(co);
+    public static void getAllRelations() {
+        List<Relation> list = dbGetAllRelation();
+        for (Relation rel : list) {
+            showRelation(rel);
         }
     }
 
-    public static void updateContact() throws IOException,SQLException{
+    public static void updateRelation() throws IOException, SQLException {
         // Ваша реализация метода
-        logger.info("Contact ID: ");
+        logger.info("Relation ID: ");
         Long id = Long.valueOf(br.readLine());
-        logger.info("New info: ");
-        String newInfo = br.readLine();
-        logger.info("New user_id: ");
-        String newUserId = br.readLine();
-        logger.info("New contact_type: ");
-        String newType = br.readLine();
-        Contact co = dbGetContactByID(id);
-        co.setInfo(newInfo);
-        co.setContactType(Long.parseLong(newType));
-        co.setUserId(Long.parseLong(newUserId));
-        int status = dbUpdateContact(co);
-        if (status == 1) logger.info("Contact updated successfully");
+        logger.info("Enter user_id:");
+        String userId = br.readLine();
+        logger.info("Enter contact_type:");
+        String friendId = br.readLine();
+        logger.info("Enter relation_type:");
+        String relationType = br.readLine();
+        Relation rel = dbGetRelationByID(id);
+        rel.setUserId(Long.parseLong(userId));
+        rel.setFriendId(Long.parseLong(friendId));
+        rel.setRelationType(Long.parseLong(relationType));
+        int status = dbUpdateRelation(rel);
+        if (status == 1) logger.info("Relation updated successfully");
         else
-            logger.info("ERROR while updating user");
+            logger.info("ERROR while updating relation");
     }
 
-    public static void deleteContact() throws IOException {
+    public static void deleteRelation() throws IOException {
 
-        logger.info("Contact ID: ");
+        logger.info("Relation ID: ");
         Long id = Long.valueOf(br.readLine());
-        int status = dbDeleteContact(id);
-        if (status == 1) logger.info("Contact deleted successfully");
+        int status = dbDeleteRelation(id);
+        if (status == 1) logger.info("Relation deleted successfully");
         else
-            logger.info("ERROR while deleting contact");
+            logger.info("ERROR while deleting Relation");
     }
 
-    public static List<Contact> dbGetAllContacts() {
+    public static List<Relation> dbGetAllRelation() {
 
-        List<Contact> contacts = new ArrayList<>();
+        List<Relation> relations = new ArrayList<>();
         DBFunctions db = new DBFunctions();
         Connection conn = null;
         Statement st = null;
@@ -120,16 +116,16 @@ public class CRUDContact {
         try {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
             st = conn.createStatement();
-            rs = st.executeQuery("SELECT * FROM contact");
+            rs = st.executeQuery("SELECT * FROM relation");
 
             while (rs.next()) {
-                Contact co = new Contact(
+                Relation rel = new Relation(
                         rs.getLong("id"),
                         rs.getLong("user_id"),
-                        rs.getLong("contact_type"),
-                        rs.getString("info")
+                        rs.getLong("friend_id"),
+                        rs.getLong("relation_type")
                 );
-                contacts.add(co);
+                relations.add(rel);
             }
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -157,31 +153,31 @@ public class CRUDContact {
 
             }
         }
-        return contacts;
+        return relations;
     }
 
-    public static void showContact(Contact in)
-    {
+    public static void showRelation(Relation in) {
         logger.info(in.toString());
     }
-    public static Contact dbGetContactByID(Long id) {
 
-        Contact co = null;
+    public static Relation dbGetRelationByID(Long id) {
+
+        Relation rel = null;
         DBFunctions db = new DBFunctions();
         Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
         try {
             conn = db.connectToDB("PFP", "krimlad", "krilop");
-            ps = conn.prepareStatement("SELECT * FROM contact WHERE id = ?");
+            ps = conn.prepareStatement("SELECT * FROM relation WHERE id = ?");
             ps.setLong(1, id);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                co = new Contact(rs.getLong("id"),
+                rel = new Relation(rs.getLong("id"),
                         rs.getLong("user_id"),
-                        rs.getLong("contact_type"),
-                        rs.getString("info"));
+                        rs.getLong("friend_id"),
+                        rs.getLong("relation_type"));
             }
         } catch (SQLException e) {
             throw new IllegalStateException(e);
@@ -210,54 +206,54 @@ public class CRUDContact {
 
             }
         }
-        return co;
+        return rel;
     }
 
-    public static int dbSaveContact(Contact in) throws SQLException {
-
-        int status = 0;
-        DBFunctions db = new DBFunctions();
-        Connection conn = null;
-        PreparedStatement ps = null;
+    public static int dbSaveRelation(Relation relation) throws SQLException {
+        // Подключение к базе данных
+        DBFunctions func = new DBFunctions();
         try {
-            conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
-            ps = conn.prepareStatement("INSERT INTO contact(user_id, contact_type, info) VALUES(?, ?, ?)");
-            ps.setLong(1, in.getUserId());
-            ps.setLong(2, in.getContactType());
-            ps.setString(3, in.getInfo());
-            status = ps.executeUpdate();
+            Connection connection = func.connectToDB("PFP", "krimlad", "krilop");
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT relation_type FROM relation WHERE user_id = ? AND friend_id = ?");
+            checkStatement.setLong(1, relation.getFriendId());
+            checkStatement.setLong(2, relation.getUserId());
+            ResultSet resultSet = checkStatement.executeQuery();
+            if (resultSet.next()) {
+                // Если запрос уже существует, обновляем его тип на 2
+                String updateQuery = "UPDATE relation SET relation_type = 2 WHERE user_id = ? AND friend_id = ?";
+                try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                    updateStatement.setLong(1, relation.getFriendId());
+                    updateStatement.setLong(2, relation.getUserId());
+                    return updateStatement.executeUpdate();
+                }
+            } else {
+                // Если запрос не существует, добавляем новую запись
+                String insertQuery = "INSERT INTO relation (user_id, friend_id, relation_type) VALUES (?, ?, ?)";
+                try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                    insertStatement.setLong(1, relation.getUserId());
+                    insertStatement.setLong(2, relation.getFriendId());
+                    insertStatement.setLong(3, relation.getRelationType());
+                    return insertStatement.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    logger.error(e);
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    logger.error(e);
-                }
-            }
+            logger.error(e);
         }
-        return status;
+    return -1;
     }
 
-    public static int dbUpdateContact(Contact in) throws SQLException {
+
+    public static int dbUpdateRelation(Relation in) throws SQLException {
         int status = 0;
         DBFunctions db = new DBFunctions();
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
-            ps = conn.prepareStatement("UPDATE contact SET info=?, user_id=?, contact_type=? WHERE id=?");
-            ps.setString(1, in.getInfo());
-            ps.setLong(2,in.getUserId());
-            ps.setLong(3,in.getContactType());
+            ps = conn.prepareStatement("UPDATE relation SET user_id=?, friend_id=?, relation_type=? WHERE id=?");
+            ps.setLong(1, in.getUserId());
+            ps.setLong(2, in.getFriendId());
+            ps.setLong(3, in.getRelationType());
             ps.setLong(4, in.getId());
             status = ps.executeUpdate();
         } catch (SQLException e) {
@@ -281,14 +277,14 @@ public class CRUDContact {
         return status;
     }
 
-    public static int dbDeleteContact(Long userID) {
+    public static int dbDeleteRelation(Long userID) {
         int status = 0;
         DBFunctions db = new DBFunctions();
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
-            ps = conn.prepareStatement("DELETE FROM contact where id=?");
+            ps = conn.prepareStatement("DELETE FROM relation where id=?");
             ps.setLong(1, userID);
             status = ps.executeUpdate();
         } catch (SQLException e) {
