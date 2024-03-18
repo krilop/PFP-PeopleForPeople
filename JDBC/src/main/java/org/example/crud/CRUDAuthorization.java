@@ -47,7 +47,11 @@ public class CRUDAuthorization {
                 {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
+                    Authorization user = dbGetUserByID(id);
+                    if(user!=null)
                     showUser(dbGetUserByID(id));
+                    else
+                        logger.error("user doesn't exist");
                 }
                 default -> {
                     logger.info("Exit");

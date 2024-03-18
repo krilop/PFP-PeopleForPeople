@@ -1,17 +1,14 @@
 package org.example.crud;
 
-import com.google.common.hash.Hashing;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.DBFunctions;
-import org.example.data.Authorization;
-import org.example.data.Contact;
 import org.example.data.Constants;
+import org.example.data.Contact;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +42,11 @@ public class CRUDContact {
                 {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
-                    showContact(dbGetContactByID(id));
+                    Contact conn =dbGetContactByID(id);
+                    if(conn!=null)
+                    showContact(conn);
+                    else
+                        logger.error("contact doesn't exist");
                 }
                 default -> {
                     logger.info("Exit");
