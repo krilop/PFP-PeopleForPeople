@@ -154,9 +154,9 @@ public class CRUDAuthorization {
             while (rs.next()) {
                 Authorization user = new Authorization(
                         rs.getLong("id"),
-                        rs.getString("email"),
+                        rs.getString("login"),
                         rs.getString("hash_of_pass"),
-                        rs.getString("login")
+                        rs.getString("email")
                 );
                 users.add(user);
             }

@@ -51,7 +51,8 @@
             CRUDAuthorization.createUser(login, password, email);
             out.println("Authentication successful!");
             Authorization auth = CRUDAuthorization.dbGetUserByName(login);
-            response.sendRedirect("/index.jsp?id="+auth.getId());
+            String contextPath = request.getContextPath();
+            response.sendRedirect(contextPath + "/index.jsp?id=" + auth.getId());
         }
     %>
 </form>

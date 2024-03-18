@@ -38,8 +38,7 @@ public class CRUDRelation {
                 case "2" -> getAllRelations();
                 case "3" -> updateRelation();
                 case "4" -> deleteRelation();
-                case "5" ->
-                {
+                case "5" -> {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
                     showRelation(dbGetRelationByID(id));
@@ -51,7 +50,8 @@ public class CRUDRelation {
             }
         } while (true);
     }
-    public static void createRelation() throws IOException, SQLException{
+
+    public static void createRelation() throws IOException, SQLException {
         // Ваша реализация метода
         logger.info("Enter user_id:");
         String userId = br.readLine();
@@ -76,7 +76,7 @@ public class CRUDRelation {
         }
     }
 
-    public static void updateRelation() throws IOException,SQLException{
+    public static void updateRelation() throws IOException, SQLException {
         // Ваша реализация метода
         logger.info("Relation ID: ");
         Long id = Long.valueOf(br.readLine());
@@ -156,10 +156,10 @@ public class CRUDRelation {
         return relations;
     }
 
-    public static void showRelation(Relation in)
-    {
+    public static void showRelation(Relation in) {
         logger.info(in.toString());
     }
+
     public static Relation dbGetRelationByID(Long id) {
 
         Relation rel = null;
@@ -209,39 +209,39 @@ public class CRUDRelation {
         return rel;
     }
 
-    public static int dbSaveRelation(Relation in) throws SQLException {
-
-        int status = 0;
-        DBFunctions db = new DBFunctions();
-        Connection conn = null;
-        PreparedStatement ps = null;
+    public static int dbSaveRelation(Relation relation) throws SQLException {
+        // Подключение к базе данных
+        DBFunctions func = new DBFunctions();
         try {
-            conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
-            ps = conn.prepareStatement("INSERT INTO relation(user_id, friend_id, relation_type) VALUES(?, ?, ?)");
-            ps.setLong(1, in.getUserId());
-            ps.setLong(2, in.getFriendId());
-            ps.setLong(3, in.getRelationType());
-            status = ps.executeUpdate();
+            Connection connection = func.connectToDB("PFP", "krimlad", "krilop");
+            PreparedStatement checkStatement = connection.prepareStatement("SELECT relation_type FROM relation WHERE user_id = ? AND friend_id = ?");
+            checkStatement.setLong(1, relation.getFriendId());
+            checkStatement.setLong(2, relation.getUserId());
+            ResultSet resultSet = checkStatement.executeQuery();
+            if (resultSet.next()) {
+                // Если запрос уже существует, обновляем его тип на 2
+                String updateQuery = "UPDATE relation SET relation_type = 2 WHERE user_id = ? AND friend_id = ?";
+                try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                    updateStatement.setLong(1, relation.getFriendId());
+                    updateStatement.setLong(2, relation.getUserId());
+                    return updateStatement.executeUpdate();
+                }
+            } else {
+                // Если запрос не существует, добавляем новую запись
+                String insertQuery = "INSERT INTO relation (user_id, friend_id, relation_type) VALUES (?, ?, ?)";
+                try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
+                    insertStatement.setLong(1, relation.getUserId());
+                    insertStatement.setLong(2, relation.getFriendId());
+                    insertStatement.setLong(3, relation.getRelationType());
+                    return insertStatement.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
-            throw new IllegalStateException(e);
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    logger.error(e);
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    logger.error(e);
-                }
-            }
+            logger.error(e);
         }
-        return status;
+    return -1;
     }
+
 
     public static int dbUpdateRelation(Relation in) throws SQLException {
         int status = 0;
@@ -252,8 +252,8 @@ public class CRUDRelation {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
             ps = conn.prepareStatement("UPDATE relation SET user_id=?, friend_id=?, relation_type=? WHERE id=?");
             ps.setLong(1, in.getUserId());
-            ps.setLong(2,in.getFriendId());
-            ps.setLong(3,in.getRelationType());
+            ps.setLong(2, in.getFriendId());
+            ps.setLong(3, in.getRelationType());
             ps.setLong(4, in.getId());
             status = ps.executeUpdate();
         } catch (SQLException e) {
