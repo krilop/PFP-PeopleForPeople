@@ -41,7 +41,11 @@ public class CRUDRelation {
                 case "5" -> {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
-                    showRelation(dbGetRelationByID(id));
+                    Relation rel = dbGetRelationByID(id);
+                    if (rel != null)
+                        showRelation(rel);
+                    else
+                        logger.error("Relation doesn't exist");
                 }
                 default -> {
                     logger.info("Exit");
@@ -157,7 +161,10 @@ public class CRUDRelation {
     }
 
     public static void showRelation(Relation in) {
-        logger.info(in.toString());
+        if (in != null) {
+            String str = in.toString();
+            logger.info(str);
+        }
     }
 
     public static Relation dbGetRelationByID(Long id) {
@@ -239,7 +246,7 @@ public class CRUDRelation {
         } catch (SQLException e) {
             logger.error(e);
         }
-    return -1;
+        return -1;
     }
 
 
