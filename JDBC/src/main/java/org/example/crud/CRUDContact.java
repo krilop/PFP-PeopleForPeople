@@ -162,7 +162,8 @@ public class CRUDContact {
 
     public static void showContact(Contact in) {
         if (in != null) {
-            logger.info(in.toString());
+            String str = in.toString();
+            logger.info(str);
         }
     }
     public static Contact dbGetContactByID(Long id) {

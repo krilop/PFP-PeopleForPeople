@@ -162,7 +162,8 @@ public class CRUDRelation {
 
     public static void showRelation(Relation in) {
         if (in != null) {
-            logger.info(in.toString());
+            String str = in.toString();
+            logger.info(str);
         }
     }
 
