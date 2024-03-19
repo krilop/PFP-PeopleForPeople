@@ -13,8 +13,8 @@
 </head>
 <body>
 
-<a href="${pageContext.request.contextPath}/registration.jsp">Авторизация</a>
-<form action="${pageContext.request.contextPath}/sign_in.jsp" method="post">
+<a href="${e:forHtml(pageContext.request.contextPath)}/registration.jsp">Регистрация</a>
+<form action="${e:forHtml(pageContext.request.contextPath)}/sign_in.jsp" method="post">
     <label for="emailOrLogin">Email или логин:</label>
     <input type="text" id="emailOrLogin" name="emailOrLogin"><br><br>
 

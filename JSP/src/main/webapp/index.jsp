@@ -9,12 +9,12 @@
 <h1><%= "Welcome to our new platform for acquaintances!"%></h1>
 <% if(request.getParameter("id")!=null)
 {%>
-<a href="${pageContext.request.contextPath}/userlist.jsp?id=<%= request.getParameter("id") %>">Список доступных пользователей</a>
+<a href="${e:forHtml(pageContext.request.contextPath)}/userlist.jsp?id=<%= request.getParameter("id") %>">Список доступных пользователей</a>
 
 <%}else{
 %>
-<a href="${pageContext.request.contextPath}/sign_in.jsp">Авторизация</a>
-<a href="${pageContext.request.contextPath}/registration.jsp">Регистрация</a>
+<a href="${e:forHtml(pageContext.request.contextPath)}/sign_in.jsp">Авторизация</a>
+<a href="${e:forHtml(pageContext.request.contextPath)}/registration.jsp">Регистрация</a>
 
 <%}%>
 </body>

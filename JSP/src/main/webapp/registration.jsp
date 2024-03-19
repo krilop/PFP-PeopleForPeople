@@ -18,8 +18,8 @@
             response.sendRedirect("/index.jsp?id="+request.getParameter("id"));
         }
     %>
-<a href="${pageContext.request.contextPath}/sign_in.jsp">Авторизация</a>
-<form action="${pageContext.request.contextPath}/registration.jsp" method="post">
+<a href="${e:forHtml(pageContext.request.contextPath)}/sign_in.jsp">Авторизация</a>
+<form action="${e:forHtml(pageContext.request.contextPath)}/registration.jsp" method="post">
     <label for="login">Login:</label>
     <input type="text" id="login" name="login"><br><br>
 
