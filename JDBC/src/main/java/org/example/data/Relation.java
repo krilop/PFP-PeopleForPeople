@@ -5,15 +5,15 @@ import lombok.Data;
 @Data
 public class Relation {
 
-    Long Id;
-    Long UserId;
-    Long FriendId;
-    Long RelationType;
+    Long id;
+    Long userId;
+    Long friendId;
+    Long relationType;
 
     public Relation(Long id, Long userId, Long friendId, Long relationType) {
-        Id = id;
-        UserId = userId;
-        FriendId = friendId;
-        RelationType = relationType;
+        this.id = id;
+        this.userId = userId;
+        this.friendId = friendId;
+        this.relationType = relationType;
     }
 }

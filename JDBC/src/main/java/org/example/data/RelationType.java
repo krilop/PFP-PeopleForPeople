@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class RelationType {
-    Long Id;
-    String RelationTitle;
+    Long id;
+    String relationTitle;
 
     public RelationType(Long id, String relationTitle) {
-        Id = id;
-        RelationTitle = relationTitle;
+        this.id = id;
+        this.relationTitle = relationTitle;
     }
 }
