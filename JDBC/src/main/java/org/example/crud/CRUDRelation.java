@@ -161,7 +161,9 @@ public class CRUDRelation {
     }
 
     public static void showRelation(Relation in) {
-        logger.info(in.toString());
+        if (in != null) {
+            logger.info(in.toString());
+        }
     }
 
     public static Relation dbGetRelationByID(Long id) {

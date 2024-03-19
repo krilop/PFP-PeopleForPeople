@@ -160,9 +160,10 @@ public class CRUDContact {
         return contacts;
     }
 
-    public static void showContact(Contact in)
-    {
-        logger.info(in.toString());
+    public static void showContact(Contact in) {
+        if (in != null) {
+            logger.info(in.toString());
+        }
     }
     public static Contact dbGetContactByID(Long id) {
 
