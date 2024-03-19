@@ -48,7 +48,7 @@ public class CRUDAuthorization {
                     Long id = Long.parseLong(br.readLine());
                     Authorization user = dbGetUserByID(id);
                     if (user != null)
-                        showUser(dbGetUserByID(id));
+                        showUser(user);
                     else
                         logger.error("user doesn't exist");
                 }

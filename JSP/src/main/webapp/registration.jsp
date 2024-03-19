@@ -5,7 +5,8 @@
 <%@ page import="java.nio.charset.StandardCharsets" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html lang="ru,en" xml:lang="ru,en">
+
 <head>
     <title>PFP</title>
     <link rel="stylesheet" href="stylesheets/common.css">
@@ -18,8 +19,8 @@
             response.sendRedirect("/index.jsp?id="+request.getParameter("id"));
         }
     %>
-<a href="${pageContext.request.contextPath}/sign_in.jsp">Авторизация</a>
-<form action="${pageContext.request.contextPath}/registration.jsp" method="post">
+<a href="${e:forHtml(pageContext.request.contextPath)}/sign_in.jsp">Авторизация</a>
+<form action="${e:forHtml(pageContext.request.contextPath)}/registration.jsp" method="post">
     <label for="login">Login:</label>
     <input type="text" id="login" name="login"><br><br>
 
