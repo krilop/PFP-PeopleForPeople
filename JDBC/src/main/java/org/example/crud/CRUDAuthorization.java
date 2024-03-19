@@ -34,7 +34,7 @@ public class CRUDAuthorization {
                     "\t2 - Read\n" +
                     "\t3 - Update\n" +
                     "\t4 - Delete\n" +
-                    "\t5 - Get user by id\n"+
+                    "\t5 - Get user by id\n" +
                     "\tAnother - cancel\n" +
                     "\tEnter num:");
             caseTable = br.readLine();
@@ -43,13 +43,12 @@ public class CRUDAuthorization {
                 case "2" -> getAllUsers();
                 case "3" -> updateUser();
                 case "4" -> deleteUser();
-                case "5" ->
-                {
+                case "5" -> {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
                     Authorization user = dbGetUserByID(id);
-                    if(user!=null)
-                    showUser(dbGetUserByID(id));
+                    if (user != null)
+                        showUser(dbGetUserByID(id));
                     else
                         logger.error("user doesn't exist");
                 }
@@ -82,6 +81,7 @@ public class CRUDAuthorization {
             logger.info("ERROR while saving user");
         logger.info("\n");
     }
+
     public static void createUser(String login, String password, String email) throws SQLException {
 
 
@@ -244,6 +244,7 @@ public class CRUDAuthorization {
         }
         return user;
     }
+
     public static Authorization dbGetUserByName(String name) {
         Authorization user = null;
         DBFunctions db = new DBFunctions();
@@ -337,8 +338,8 @@ public class CRUDAuthorization {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
             ps = conn.prepareStatement("UPDATE \"authorization\" SET email=?, hash_of_pass=?, login=? WHERE id=?");
             ps.setString(1, user.getEmail());
-            ps.setString(2,user.getHashOfPass());
-            ps.setString(3,user.getLogin());
+            ps.setString(2, user.getHashOfPass());
+            ps.setString(3, user.getLogin());
             ps.setLong(4, user.getId());
             status = ps.executeUpdate();
         } catch (SQLException e) {

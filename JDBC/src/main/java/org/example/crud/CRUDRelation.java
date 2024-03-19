@@ -42,8 +42,8 @@ public class CRUDRelation {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
                     Relation rel = dbGetRelationByID(id);
-                    if(rel!=null)
-                    showRelation(rel);
+                    if (rel != null)
+                        showRelation(rel);
                     else
                         logger.error("Relation doesn't exist");
                 }
@@ -246,7 +246,7 @@ public class CRUDRelation {
         } catch (SQLException e) {
             logger.error(e);
         }
-    return -1;
+        return -1;
     }
 
 

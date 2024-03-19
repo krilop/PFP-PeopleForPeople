@@ -38,13 +38,12 @@ public class CRUDContact {
                 case "2" -> getAllContact();
                 case "3" -> updateContact();
                 case "4" -> deleteContact();
-                case "5" ->
-                {
+                case "5" -> {
                     logger.info("Enter id:");
                     Long id = Long.parseLong(br.readLine());
-                    Contact conn =dbGetContactByID(id);
-                    if(conn!=null)
-                    showContact(conn);
+                    Contact conn = dbGetContactByID(id);
+                    if (conn != null)
+                        showContact(conn);
                     else
                         logger.error("contact doesn't exist");
                 }
@@ -55,7 +54,8 @@ public class CRUDContact {
             }
         } while (true);
     }
-    public static void createContact() throws IOException, SQLException{
+
+    public static void createContact() throws IOException, SQLException {
         // Ваша реализация метода
         logger.info("Enter user_id:");
         String userId = br.readLine();
@@ -80,7 +80,7 @@ public class CRUDContact {
         }
     }
 
-    public static void updateContact() throws IOException,SQLException{
+    public static void updateContact() throws IOException, SQLException {
         // Ваша реализация метода
         logger.info("Contact ID: ");
         Long id = Long.valueOf(br.readLine());
@@ -166,6 +166,7 @@ public class CRUDContact {
             logger.info(str);
         }
     }
+
     public static Contact dbGetContactByID(Long id) {
 
         Contact co = null;
@@ -258,8 +259,8 @@ public class CRUDContact {
             conn = db.connectToDB(Constants.DATABASE_NAME, Constants.USERNAME, Constants.PASSWORD);
             ps = conn.prepareStatement("UPDATE contact SET info=?, user_id=?, contact_type=? WHERE id=?");
             ps.setString(1, in.getInfo());
-            ps.setLong(2,in.getUserId());
-            ps.setLong(3,in.getContactType());
+            ps.setLong(2, in.getUserId());
+            ps.setLong(3, in.getContactType());
             ps.setLong(4, in.getId());
             status = ps.executeUpdate();
         } catch (SQLException e) {
