@@ -18,12 +18,11 @@ body {
 a{
     text-align: center;
     margin-top: 24px;
-    /* margin-right: 15px;*/
     border-width: 3px;
     border-style:solid;
     padding: 5px;
     font-size: 22px;
-    font-family: Lato;
+    font-family: Lato, sans-serif;
     font-weight: 900;
     background-color: #232323;
     border-color: #e9e7e7;
