@@ -5,7 +5,7 @@
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ru,en" xml:lang="ru,en">
 <head>
     <title>PFP</title>
     <link rel="stylesheet" href="stylesheets/common.css">
