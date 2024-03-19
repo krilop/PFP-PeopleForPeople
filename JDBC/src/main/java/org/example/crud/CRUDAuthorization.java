@@ -158,9 +158,9 @@ public class CRUDAuthorization {
             while (rs.next()) {
                 Authorization user = new Authorization(
                         rs.getLong("id"),
-                        rs.getString("login"),
-                        rs.getString("hash_of_pass"),
-                        rs.getString("email")
+                        rs.getString(Constants.LOGIN),
+                        rs.getString(Constants.HASH_OF_PASS),
+                        rs.getString(Constants.EMAIL)
                 );
                 users.add(user);
             }
@@ -209,9 +209,9 @@ public class CRUDAuthorization {
 
             while (rs.next()) {
                 user = new Authorization(rs.getLong("id"),
-                        rs.getString("email"),
-                        rs.getString("hash_of_pass"),
-                        rs.getString("login"));
+                        rs.getString(Constants.EMAIL),
+                        rs.getString(Constants.HASH_OF_PASS),
+                        rs.getString(Constants.LOGIN));
 
             }
 
@@ -259,9 +259,9 @@ public class CRUDAuthorization {
 
             while (rs.next()) {
                 user = new Authorization(rs.getLong("id"),
-                        rs.getString("email"),
-                        rs.getString("hash_of_pass"),
-                        rs.getString("login"));
+                        rs.getString(Constants.EMAIL),
+                        rs.getString(Constants.HASH_OF_PASS),
+                        rs.getString(Constants.LOGIN));
 
             }
 
