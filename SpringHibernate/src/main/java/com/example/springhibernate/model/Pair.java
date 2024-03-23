@@ -1,11 +1,9 @@
 package com.example.springhibernate.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "relation")
 public class Pair {
@@ -24,11 +22,11 @@ public class Pair {
     @Column(nullable = false)
     private Boolean direction;
 
-    @Column(name = "relation_type",nullable = false)
+    @Column(name = "relation_title",nullable = false)
     @ManyToMany
     @JoinTable(
             name = "relation_type",
-            joinColumns = @JoinColumn(name = "id"),
-            inverseJoinColumns = @JoinColumn(name = "id"))
+            joinColumns = @JoinColumn(name = "pair_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "relation_type_id", referencedColumnName = "id"))
     private List<RelationType> relationTypes;
 }

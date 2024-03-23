@@ -3,18 +3,22 @@ package com.example.springhibernate.service.impl;
 import com.example.springhibernate.model.Authorization;
 import com.example.springhibernate.repository.AuthRepository;
 import com.example.springhibernate.service.AuthService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 @Primary
 public class AuthorizationService implements AuthService {
 
     private final AuthRepository repository;
+    @Autowired
+    public AuthorizationService(AuthRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<Authorization> findAllUsers() {
@@ -27,8 +31,8 @@ public class AuthorizationService implements AuthService {
     }
 
     @Override
-    public Authorization findUserById(Long id) {
-        return repository.findById(id);
+    public Optional<Authorization> findUserById(Long id) {
+        return repository.findAuthorizationById(id);
     }
 
     @Override

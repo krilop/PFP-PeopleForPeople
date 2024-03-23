@@ -1,9 +1,7 @@
 package com.example.springhibernate.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
-@Data
 @Entity
 @Table(name = "authorization")
 public class Authorization {
@@ -20,7 +18,8 @@ public class Authorization {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @OneToOne(mappedBy = "user_data",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @OneToOne
+    @PrimaryKeyJoinColumn(name = "user_data")
     private UserData userData;
+
 }

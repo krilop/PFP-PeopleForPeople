@@ -2,7 +2,6 @@ package com.example.springhibernate.model;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
-import lombok.Data;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
@@ -10,25 +9,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-@Data
 @Entity
 @Table(name = "user_data")
 public class UserData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column
-    private String discription;
+    private String description;
 
-    @Column(name="date_of_birth", nullable = false)
+    @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
     @Column(nullable = false)
@@ -37,7 +35,6 @@ public class UserData {
     @Column
     @Transient
     private short age;
-
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
@@ -54,4 +51,7 @@ public class UserData {
     @JoinColumn(name = "user_id")
     private List<Contact> contacts;
 
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Authorization authorization;
 }

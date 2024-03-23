@@ -1,11 +1,9 @@
 package com.example.springhibernate.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "relation_type")
 public class RelationType {
@@ -18,6 +16,6 @@ public class RelationType {
     private String relationTitle;
 
     @Column
-    @ManyToMany(mappedBy = "pair")
+    @ManyToMany(mappedBy = "relationTypes")
     private List<Pair> pairs;
 }
