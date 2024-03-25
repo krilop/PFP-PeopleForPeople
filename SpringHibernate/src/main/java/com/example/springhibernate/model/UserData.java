@@ -1,19 +1,19 @@
 package com.example.springhibernate.model;
 
-import io.hypersistence.utils.hibernate.type.json.JsonType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "user_data")
 public class UserData {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -30,28 +30,49 @@ public class UserData {
     private LocalDate dateOfBirth;
 
     @Column(nullable = false)
-    private boolean gender;
+    private int gender;
 
     @Column
     @Transient
-    private short age;
+    private int age;
 
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
-    private Map<Long, List<String>> media = new HashMap<>();
+    @Column
+    private String media;
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE
+    })
     @JoinTable(
             name = "interest_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "interest_id"))
     private List<Interest> interests;
 
-    @OneToMany
+    @JsonIgnore
+    @OneToMany(cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE
+    })
     @JoinColumn(name = "user_id")
     private List<Contact> contacts;
 
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE
+    })
     @PrimaryKeyJoinColumn
     private Authorization authorization;
+
+
+    public void addInterest(Interest interest) {
+        interests.add(interest);
+        interest.getUserDataList().add(this);
+    }
+
+    // Метод для удаления интереса у пользователя (если необходимо)
+    public void removeInterest(Interest interest) {
+        interests.remove(interest);
+        interest.getUserDataList().remove(this);
+    }
+
 }

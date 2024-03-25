@@ -1,18 +1,18 @@
 package com.example.springhibernate.service;
 
 import com.example.springhibernate.model.Authorization;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.stereotype.Service;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
 public interface AuthService {
-    List<Authorization> findAllUsers() throws JsonProcessingException;
-    void saveUser(Authorization in);
-    Optional<Authorization> findUserById(Long id);
+    List<Authorization> findAllAuthorizations();
 
-    void updateUser(Authorization in);
-    void deleteUser(Long id);
+    ResponseEntity<Authorization> createAuthorization(Authorization in);
+
+    void deleteAuthorizationById(Long id);
+
+    void updateAuthorization(Authorization in);
+
+    Authorization findAuthorizationByLoginOrEmail(String login, String email, String pass);
 }

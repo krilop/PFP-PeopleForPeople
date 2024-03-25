@@ -3,6 +3,7 @@
 <%@ page import="org.example.crud.CRUDAuthorization" %>
 <%@ page import="com.google.common.hash.Hashing" %>
 <%@ page import="java.nio.charset.StandardCharsets" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ru,en" xml:lang="ru,en">
@@ -41,7 +42,7 @@
             List <Authorization> authorizations = CRUDAuthorization.dbGetAllUsers();
             int source = 1;
         for (Authorization auth:authorizations) {
-            if(source == 1 && (auth.getLogin()==login||auth.getEmail()==email))
+            if(source == 1 && (auth.getLogin().equals(login) || auth.getEmail().equals(email)))
             {
                 source = 0;
                 out.println("Registration failed!");
@@ -49,7 +50,11 @@
         }
         if(source==1&&email!=null&&login!=null&&password!=null)
         {
-            CRUDAuthorization.createUser(login, password, email);
+            try {
+                CRUDAuthorization.createUser(login, password, email);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             out.println("Authentication successful!");
             Authorization auth = CRUDAuthorization.dbGetUserByName(login);
             String contextPath = request.getContextPath();
