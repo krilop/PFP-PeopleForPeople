@@ -1,6 +1,5 @@
 package com.example.springhibernate.controller;
 
-import com.example.springhibernate.DTO.ContactDTO;
 import com.example.springhibernate.DTO.InterestDTO;
 import com.example.springhibernate.DTO.UserDTO;
 import com.example.springhibernate.model.Authorization;
@@ -121,9 +120,4 @@ public class PFPController {
         return contactService.findAllContacts();
     }
 
-    @PostMapping("/profile/{id}/addNewContact")
-    public ResponseEntity<?> addNewContactForUser(@Valid @RequestBody ContactDTO)
-    {
-        return null;
-    }
 }
