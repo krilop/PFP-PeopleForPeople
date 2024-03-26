@@ -16,36 +16,36 @@ import java.util.Optional;
 @Service
 public class ContactService implements ContService {
 
-    ContactRepository repository;
+    ContactRepository contactRepository;
     UserDataRepository userDataRepository;
 
     public ResponseEntity<List<Contact>> findAllContactsById(Long id)
     {
-        return new ResponseEntity<>(repository.findContactsByUserDataId(id),HttpStatus.OK);
+        return new ResponseEntity<>(contactRepository.findContactsByUserDataId(id),HttpStatus.OK);
     }
 
     public ResponseEntity<List<Contact>> findAllContacts(){
-        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(contactRepository.findAll(), HttpStatus.OK);
     }
 
     public ResponseEntity<?> createContactForUser(Contact contact) {
-        Contact savedContact = repository.save(contact);
+        Contact savedContact = contactRepository.save(contact);
         return ResponseEntity.ok(savedContact);
     }
 
     public ResponseEntity<?> removeContactForUser(Contact contact) {
-        repository.delete(contact);
+        contactRepository.delete(contact);
         return ResponseEntity.ok("Successfully deleted");
     }
 
     public Optional<Contact> findContact(Long id)
     {
-        return repository.findById(id);
+        return contactRepository.findById(id);
     }
 
     public ResponseEntity<?> removeContactById(Long id)
     {
-        repository.deleteById(id);
+        contactRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

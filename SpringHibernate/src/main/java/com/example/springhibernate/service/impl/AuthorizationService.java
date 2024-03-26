@@ -15,16 +15,16 @@ import java.util.List;
 @Service
 public class AuthorizationService implements AuthService {
 
-    private final AuthRepository repository;
+    private final AuthRepository authRepository;
 
     @Autowired
     public AuthorizationService(AuthRepository repository) {
-        this.repository = repository;
+        this.authRepository = repository;
     }
 
     @Override
     public List<Authorization> findAllAuthorizations() {
-        return repository.findAll();
+        return authRepository.findAll();
     }
 
     @Override
@@ -32,9 +32,9 @@ public class AuthorizationService implements AuthService {
         in.setHashOfPass(Hashing.sha256()
                 .hashString(in.getHashOfPass(), StandardCharsets.UTF_8)
                 .toString());
-        Authorization tmp = repository.findAuthorizationByLoginOrEmail(in.getLogin(), in.getEmail());
+        Authorization tmp = authRepository.findAuthorizationByLoginOrEmail(in.getLogin(), in.getEmail());
         if(tmp==null) {
-            repository.save(in);
+            authRepository.save(in);
             return new ResponseEntity<>(tmp,HttpStatus.CREATED);
         }
         else{
@@ -45,20 +45,20 @@ public class AuthorizationService implements AuthService {
 
     @Override
     public void deleteAuthorizationById(Long id) {
-        repository.deleteById(id);
+        authRepository.deleteById(id);
     }
 
 
     @Override
     public void updateAuthorization(Authorization in) {
-        Authorization tmp= repository.findAuthorizationByLoginOrEmail(in.getLogin(),in.getEmail());
+        Authorization tmp= authRepository.findAuthorizationByLoginOrEmail(in.getLogin(),in.getEmail());
         in.setId(tmp.getId());
-        repository.save(in);
+        authRepository.save(in);
     }
 
     @Override
     public Authorization findAuthorizationByLoginOrEmail(String login, String email, String pass) {
-        return repository.findAuthorizationByLoginOrEmailAndHashOfPass(login, email, Hashing.sha256()
+        return authRepository.findAuthorizationByLoginOrEmailAndHashOfPass(login, email, Hashing.sha256()
                 .hashString(pass, StandardCharsets.UTF_8)
                 .toString());
     }
