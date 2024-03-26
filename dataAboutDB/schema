@@ -1,125 +1,73 @@
-create table if not exists public."authorization"
-(
-    id           bigint generated always as identity
-        constraint pk_authorization_id
-            primary key,
-    email        text        not null,
-    login        varchar(30) not null,
-    hash_of_pass text        not null
+create table public."authorization" (
+  id bigint primary key not null,
+  email text not null,
+  login text not null,
+  hash_of_pass text not null
 );
 
-alter table public."authorization"
-    owner to postgres;
-
-create table if not exists public.interest_type
-(
-    id            bigint generated always as identity
-        constraint pk_interest_type_id
-            primary key,
-    title_of_type text not null
-        constraint unique_title_of_type
-            unique
+create table public.contact (
+  id bigint primary key not null,
+  user_id bigint not null,
+  info text not null,
+  contact_type contact_type_enum not null,
+  foreign key (user_id) references public."authorization" (id)
+  match simple on update no action on delete no action
 );
 
-alter table public.interest_type
-    owner to postgres;
+create table public.interest_type (
+  id bigint primary key not null,
+  title_of_type text not null
+);
+create unique index unique_title_of_type on interest_type using btree (title_of_type);
 
-create table if not exists public.interest_type_user
-(
-    id          bigint generated always as identity
-        constraint pk_interest_type_user_id
-            primary key,
-    user_id     bigint   not null
-        constraint authorization_id
-            references public."authorization",
-    interest_id smallint not null
-        constraint interest_type_id
-            references public.interest_type
+create table public.interest_user (
+  id bigint primary key not null,
+  user_id bigint not null,
+  interest_id smallint not null,
+  foreign key (user_id) references public."authorization" (id)
+  match simple on update no action on delete no action,
+  foreign key (interest_id) references public.interest_type (id)
+  match simple on update no action on delete no action
 );
 
-alter table public.interest_type_user
-    owner to postgres;
+create table public.pair (
+  user_id bigint not null,
+  another_id bigint not null,
+  id bigint primary key not null,
+  direction boolean not null,
+  foreign key (another_id) references public.user_data (user_id)
+  match simple on update no action on delete no action,
+  foreign key (user_id) references public.user_data (user_id)
+  match simple on update no action on delete no action
+);
+create unique index pair_user_id_another_id_direction on pair using btree (user_id, another_id, direction);
 
-create table if not exists public.relation_type
-(
-    id             bigint generated always as identity
-        constraint pk_relation_type_id
-            primary key,
-    relation_title text not null
-        constraint unique_relation_title
-            unique
+create table public.relation (
+  id bigint primary key not null,
+  pair_id bigint not null,
+  relation_type bigint not null,
+  foreign key (pair_id) references public.pair (id)
+  match simple on update no action on delete no action,
+  foreign key (relation_type) references public.relation_type (id)
+  match simple on update no action on delete no action
 );
 
-alter table public.relation_type
-    owner to postgres;
-
-create table if not exists public.relation
-(
-    id            bigint generated always as identity
-        constraint pk_relation_id
-            primary key,
-    user_id       bigint not null
-        constraint authorization_id_2
-            references public."authorization",
-    friend_id     bigint not null
-        constraint authorization_id
-            references public."authorization",
-    relation_type bigint not null
-        constraint relation_type_id
-            references public.relation_type
+create table public.relation_type (
+  id bigint primary key not null,
+  relation_title text not null
 );
+create unique index unique_relation_title on relation_type using btree (relation_title);
 
-alter table public.relation
-    owner to postgres;
-
-create table if not exists public.user_data
-(
-    name          text       not null,
-    last_name     text       not null,
-    description   text,
-    date_of_birth timestamp  not null,
-    geolocation   text       not null,
-    media         json,
-    gender        numeric(1) not null,
-    user_id       bigint     not null
-        constraint pk_user_data_user_id
-            primary key
-        constraint unique_user_id
-            unique
-        constraint authorization_id
-            references public."authorization"
+create table public.user_data (
+  name text not null,
+  last_name text not null,
+  description text,
+  date_of_birth timestamp without time zone not null,
+  media jsonb,
+  gender numeric(1,0) not null,
+  user_id bigint primary key not null,
+  foreign key (user_id) references public."authorization" (id)
+  match simple on update no action on delete no action
 );
-
-alter table public.user_data
-    owner to postgres;
-
-create table if not exists public.contact_type
-(
-    id            bigint not null
-        constraint pk_contact_type_id
-            primary key,
-    contact_title text   not null
-        constraint unique_contact_title
-            unique
-);
-
-alter table public.contact_type
-    owner to postgres;
-
-create table if not exists public.contact
-(
-    id           bigint generated always as identity
-        constraint pk_contact_id
-            primary key,
-    user_id      bigint           not null
-        constraint authorization_id
-            references public."authorization",
-    info         text             not null,
-    contact_type bigint default 1 not null
-        constraint contact_type_id
-            references public.contact_type
-);
-
-alter table public.contact
-    owner to postgres;
+create unique index unique_user_id on user_data using btree (user_id);
 
