@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/PFP
+    url: jdbc:postgresql://localhost:5432/PFP?stringtype=unspecified
     username: krimlad
     password: krilop
     driver-class-name: org.postgresql.Driver

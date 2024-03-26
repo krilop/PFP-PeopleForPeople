@@ -17,6 +17,5 @@ public interface InfoService{
 
     void deleteUserDataById(Long id);
 
-    void updateUserDataById(UserData in);
-
+    void updateUserData(UserData in);
 }

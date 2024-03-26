@@ -55,7 +55,7 @@ public class InformationService implements InfoService {
     }
 
     @Override
-    public void updateUserDataById(UserData in) {
+    public void updateUserData(UserData in) {
         repository.save(in);
     }
 

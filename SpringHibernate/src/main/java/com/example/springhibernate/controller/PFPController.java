@@ -1,14 +1,14 @@
 package com.example.springhibernate.controller;
 
+import com.example.springhibernate.DTO.ContactDTO;
 import com.example.springhibernate.DTO.InterestDTO;
 import com.example.springhibernate.DTO.UserDTO;
-import com.example.springhibernate.model.Authorization;
-import com.example.springhibernate.model.Interest;
-import com.example.springhibernate.model.UserData;
+import com.example.springhibernate.model.*;
 import com.example.springhibernate.service.AuthService;
 import com.example.springhibernate.service.impl.ContactService;
 import com.example.springhibernate.service.impl.InformationService;
 import com.example.springhibernate.service.impl.InterestService;
+import com.example.springhibernate.service.impl.RelationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +28,7 @@ public class PFPController {
     private final InformationService infoService;
     private final InterestService interestService;
     private final ContactService contactService;
+    private final RelationService relationService;
     @GetMapping("/authorizations")
     public List<Authorization> getAllAuthorizations() {
         return authService.findAllAuthorizations();
@@ -102,7 +103,7 @@ public class PFPController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/interests/addnew")
+    @PostMapping("/interests/addNew")
     public ResponseEntity<?> createNewInterest(@Valid @RequestBody InterestDTO newInterest)
     {
         return  interestService.createNewInterest(newInterest);
@@ -115,9 +116,62 @@ public class PFPController {
     }
 
     @GetMapping("/contacts/{id}")
-    public ResponseEntity<?> createContact()
+    public ResponseEntity<?> findAllContacts()
     {
         return contactService.findAllContacts();
     }
 
+    @PostMapping("/contacts/{userId}")
+    public ResponseEntity<?> addContactToUser(@PathVariable("userId") Long userId, @Valid @RequestBody ContactDTO contactDTO) {
+        Optional<UserData> userOptional = infoService.findUserDataById(userId);
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.notFound().build(); // или другой подходящий ответ
+        }
+        UserData user = userOptional.get();
+
+        Contact contact = new Contact();
+        contact.setInfo(contactDTO.getInfo());
+        contact.setContactType(ContactType.valueOf(contactDTO.getContactType().toUpperCase()));
+        contact.setUserData(user);
+
+        try {
+            contactService.createContactForUser(contact);
+            user.getContacts().add(contact); // Добавляем контакт к списку контактов пользователя
+            infoService.updateUserData(user); // Сохраняем обновленные данные пользователя
+            return ResponseEntity.ok().build(); // или другой подходящий ответ
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // или другой подходящий ответ
+        }
+    }
+
+
+    @DeleteMapping("/contacts/{contactId}")
+    public ResponseEntity<?> deleteContact(@PathVariable("contactId") Long contactId) {
+        Optional<Contact> contactOptional = contactService.findContact(contactId);
+        if (contactOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        contactService.removeContactById(contactId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/addNewRelationType")
+    public ResponseEntity<?> createNewRelationType(@RequestParam("title") String title)
+    {
+        return relationService.createNewRelationType(title);
+    }
+
+    @PostMapping("/relations/{userId}/{anotherUserId}")
+    public ResponseEntity<?> createNewRelationBetweenUsers(@PathVariable("userId") Long userId,@PathVariable("anotherUserId") Long anotherId,@RequestParam("relationId") Long relationId)
+    {
+        return relationService.createNewRelation(userId, anotherId, relationId);
+    }
+
+    @GetMapping("/profile/{id}/relations")
+    public ResponseEntity<?> findAllRelationsForUser(@PathVariable("id")Long id)
+    {
+        return relationService.findAllRelationsForUser(id);
+    }
 }
+
+

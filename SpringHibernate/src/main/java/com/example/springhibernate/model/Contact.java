@@ -2,11 +2,13 @@ package com.example.springhibernate.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Table(name = "contact")
 public class Contact {
 
@@ -17,8 +19,8 @@ public class Contact {
     @Column(nullable = false)
     String info;
 
-    @ManyToOne(cascade = {
-            CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE
+    @ManyToOne( cascade = {
+            CascadeType.MERGE, CascadeType.PERSIST
     })
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private UserData userData;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -65,12 +66,16 @@ public class UserData {
 
 
     public void addInterest(Interest interest) {
+        if(interests == null||interests.isEmpty())
+            interests = new ArrayList<>();
         interests.add(interest);
         interest.getUserDataList().add(this);
     }
 
     // Метод для удаления интереса у пользователя (если необходимо)
     public void removeInterest(Interest interest) {
+        if(interests == null||interests.isEmpty())
+            return;
         interests.remove(interest);
         interest.getUserDataList().remove(this);
     }

@@ -7,10 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ContactDTO {
+public class RelationDTO {
 
-    String info;
-
-    String contactType;
-
+    String userName;
+    String anotherName;
+    String relationTitle;
 }

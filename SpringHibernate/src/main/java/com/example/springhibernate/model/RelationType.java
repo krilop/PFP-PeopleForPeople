@@ -1,5 +1,6 @@
 package com.example.springhibernate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class RelationType {
     @Column(name = "relation_title", unique = true, nullable = false)
     private String relationTitle;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "relationTypes", cascade = {
             CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE
     })

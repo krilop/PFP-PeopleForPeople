@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -27,5 +28,25 @@ public class ContactService implements ContService {
         return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
     }
 
+    public ResponseEntity<?> createContactForUser(Contact contact) {
+        Contact savedContact = repository.save(contact);
+        return ResponseEntity.ok(savedContact);
+    }
+
+    public ResponseEntity<?> removeContactForUser(Contact contact) {
+        repository.delete(contact);
+        return ResponseEntity.ok("Successfully deleted");
+    }
+
+    public Optional<Contact> findContact(Long id)
+    {
+        return repository.findById(id);
+    }
+
+    public ResponseEntity<?> removeContactById(Long id)
+    {
+        repository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }
