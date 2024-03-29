@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-public interface InfoService{
+public interface UDService {
 
     Optional<UserData> findUserDataById(Long id);
 

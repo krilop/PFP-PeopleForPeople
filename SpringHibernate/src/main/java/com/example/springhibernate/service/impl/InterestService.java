@@ -20,37 +20,37 @@ import java.util.Optional;
 @AllArgsConstructor
 public class InterestService implements InterService {
 
-    UserDataRepository userRepository;
-    InterestRepository repository;
+    UserDataRepository userDataRepository;
+    InterestRepository interestRepository;
 
     @Override
     public ResponseEntity<List<Interest>> findAllInterests()
     {
-        return new ResponseEntity<List<Interest>>(repository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<List<Interest>>(interestRepository.findAll(), HttpStatus.OK);
     }
     @Override
     public ResponseEntity<Optional<Interest>> findInterestById(Long id)
     {
-        return new ResponseEntity<Optional<Interest>>(repository.findById(id),HttpStatus.OK);
+        return new ResponseEntity<Optional<Interest>>(interestRepository.findById(id),HttpStatus.OK);
     }
 
     @Transactional
     public void addUserInterest(Long userId, Long interestId) {
         // Получаем пользователя и интерес из базы данных
-        UserData user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
-        Interest interest = repository.findById(interestId).orElseThrow(() -> new EntityNotFoundException("Интерес не найден"));
+        UserData user = userDataRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+        Interest interest = interestRepository.findById(interestId).orElseThrow(() -> new EntityNotFoundException("Интерес не найден"));
 
         // Добавляем интерес пользователю
         user.getInterests().add(interest);
 
         // Сохраняем изменения в базе данных
-        userRepository.save(user);
+        userDataRepository.save(user);
     }
 
     @Transactional
     public void removeUserInterest(Long userId, Long interestId) {
         // Получаем пользователя из базы данных
-        UserData user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+        UserData user = userDataRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
 
         // Ищем интерес пользователя
         Optional<Interest> interestOptional = user.getInterests().stream()
@@ -60,7 +60,7 @@ public class InterestService implements InterService {
         if (interestOptional.isPresent()) {
             // Если интерес найден, удаляем его из списка интересов пользователя
             user.getInterests().remove(interestOptional.get());
-            userRepository.save(user); // Сохраняем изменения в базе данных
+            userDataRepository.save(user); // Сохраняем изменения в базе данных
         } else {
             throw new EntityNotFoundException("Интерес не найден у данного пользователя");
         }
@@ -72,14 +72,14 @@ public class InterestService implements InterService {
             return new ResponseEntity("Title of type cannot be null or empty", HttpStatus.BAD_REQUEST);
         }
 
-        if (repository.existsByTitleOfType(in.getTitleOfType())) {
+        if (interestRepository.existsByTitleOfType(in.getTitleOfType())) {
             return new ResponseEntity("Interest with titleOfType " + in.getTitleOfType() + " already exists", HttpStatus.BAD_REQUEST);
         }
 
         Interest newInterest = new Interest();
         newInterest.setTitleOfType(in.getTitleOfType());
         newInterest.setIcon(in.getIcon());
-        newInterest = repository.save(newInterest);
+        newInterest = interestRepository.save(newInterest);
         return new ResponseEntity<>(newInterest, HttpStatus.OK);
     }
 

@@ -2,9 +2,9 @@ package com.example.springhibernate.service.impl;
 
 import com.example.springhibernate.DTO.UserDTO;
 import com.example.springhibernate.model.UserData;
-import com.example.springhibernate.repository.AuthRepository;
+import com.example.springhibernate.repository.UserRepository;
 import com.example.springhibernate.repository.UserDataRepository;
-import com.example.springhibernate.service.InfoService;
+import com.example.springhibernate.service.UDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +15,19 @@ import java.time.Period;
 import java.util.Optional;
 
 @Service
-public class InformationService implements InfoService {
+public class UserDataService implements UDService {
 
-    private final UserDataRepository repository;
-    private final AuthRepository authRepository;
+    private final UserDataRepository userDataRepository;
+    private final UserRepository authRepository;
     @Autowired
-    public InformationService(UserDataRepository repository, AuthRepository authRepository) {
-        this.repository = repository;
+    public UserDataService(UserDataRepository repository, UserRepository authRepository) {
+        this.userDataRepository = repository;
         this.authRepository = authRepository;
     }
 
     @Override
     public Optional<UserData> findUserDataById(Long id) {
-        Optional<UserData> userDataOptional = repository.findUserDataById(id);
+        Optional<UserData> userDataOptional = userDataRepository.findUserDataById(id);
         userDataOptional.get().setAge(Period.between(userDataOptional.get().getDateOfBirth(),LocalDate.now()).getYears());
         return userDataOptional;
     }
@@ -45,18 +45,18 @@ public class InformationService implements InfoService {
         userData.setAge(Period.between(in.getDateOfBirth(), LocalDate.now()).getYears());
         userData.setDescription(in.getDescription());
         userData.setLastName(in.getLastName());
-        userData = repository.save(userData);
+        userData = userDataRepository.save(userData);
         return new ResponseEntity<>(userData, HttpStatus.OK);
     }
 
     @Override
     public void deleteUserDataById(Long id) {
-        repository.deleteById(id);
+        userDataRepository.deleteById(id);
     }
 
     @Override
     public void updateUserData(UserData in) {
-        repository.save(in);
+        userDataRepository.save(in);
     }
 
 

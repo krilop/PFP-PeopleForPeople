@@ -26,13 +26,13 @@ public class RelationService implements RelService {
     UserDataRepository userDataRepository;
     RelationTypeRepository relationTypeRepository;
 
-    PairRepository repository;
+    PairRepository pairRepository;
 
     @Autowired
     public RelationService(UserDataRepository userDataRepository, RelationTypeRepository relationTypeRepository, PairRepository repository)
     {
         this.relationTypeRepository=relationTypeRepository;
-        this.repository=repository;
+        this.pairRepository =repository;
         this.userDataRepository=userDataRepository;
     }
 
@@ -52,8 +52,8 @@ public class RelationService implements RelService {
         if(user.isEmpty()||another.isEmpty()||!rel)//проверяем наличие всех данных
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         Pair newPair;
-        int cnt = repository.countByUserId_IdAndAnotherId_Id(userId, anotherId);
-        cnt+=  repository.countByUserId_IdAndAnotherId_Id(anotherId, userId); //смотрим, сколько у нас таких пар значений
+        int cnt = pairRepository.countByUserId_IdAndAnotherId_Id(userId, anotherId);
+        cnt+=  pairRepository.countByUserId_IdAndAnotherId_Id(anotherId, userId); //смотрим, сколько у нас таких пар значений
         Optional<RelationType> relationType = relationTypeRepository.findById(relationId);
         if(cnt==0) {
             //пар 0, значит, просто создаем новую пару и добавляем ей запрошенные взаимоотношения
@@ -66,7 +66,7 @@ public class RelationService implements RelService {
         }
         else if(cnt==1){
             //пара одна. Тогда нам нужно определить, мы в базе храним данные от этого пользователя о взаимоотношениях или от другого. (direcrion была добавлена, чтобы на уровне базы сделать так, чтобы записей для пары было не больше двух)
-            newPair = repository.findByUserId_IdAndAnotherId_Id(userId,anotherId);
+            newPair = pairRepository.findByUserId_IdAndAnotherId_Id(userId,anotherId);
             //после взятия пары, смотрим на порядок в столбцах. Если наша проверка вернула true, значит, данные принадлежат этому пользователю. Тогда просто навешиваем новые отношения
             if(newPair!=null)
             {
@@ -83,17 +83,17 @@ public class RelationService implements RelService {
         }
         else{//случай, когда уже есть данные и с одной стороны, и с другой
             //Данный метод возвращает пару с конкретным порядком параметров. Пару, которая принадлежит нашему пользователю
-            newPair = repository.findByUserId_IdAndAnotherId_Id(userId,anotherId);
+            newPair = pairRepository.findByUserId_IdAndAnotherId_Id(userId,anotherId);
             //навешиваем на неё новые отношения
             newPair.addRelationTypes(relationType.get());
         }
         //сохраняем полученную пару
-        return new ResponseEntity<>(repository.save(newPair),HttpStatus.CREATED);
+        return new ResponseEntity<>(pairRepository.save(newPair),HttpStatus.CREATED);
     }
 
     public ResponseEntity<?> findAllRelationsForUser(Long id) {
         Optional<UserData> user = userDataRepository.findUserDataById(id);
-        List<Pair> pairs = repository.findPairsByUserId(user.get());
+        List<Pair> pairs = pairRepository.findPairsByUserId(user.get());
         if (pairs == null || pairs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

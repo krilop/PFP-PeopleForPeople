@@ -13,15 +13,15 @@ public class UserDTO {
 
     private Long id;
 
-    private String name; //necessary
+    private String name;
 
     private String lastName;
 
     private String description;
 
-    private LocalDate dateOfBirth; //necessary
+    private LocalDate dateOfBirth;
 
-    private boolean gender;  //necessary
+    private boolean gender;
 
     private String media;
 
