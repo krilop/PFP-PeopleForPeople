@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/PFP/interests")
+@CrossOrigin(origins = "http://localhost:4200")
 public class InterestController {
 
     private final InterestService interestService;

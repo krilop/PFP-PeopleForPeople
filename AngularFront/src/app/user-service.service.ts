@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Authorization } from "../model/authorization";
-import { Observable } from 'rxjs/Observable';
+import {Observable} from "rxjs";
+
 
 @Injectable()
 export class UserService {
@@ -12,11 +13,11 @@ export class UserService {
     this.usersUrl = 'http://localhost:8080/users';
   }
 
-  public findAll(): Observable<User[]> {
-    return this.http.get<User[]>(this.usersUrl);
+  public findAll(): Observable<Authorization[]> {
+    return this.http.get<Authorization[]>(this.usersUrl);
   }
 
-  public save(user: User) {
-    return this.http.post<User>(this.usersUrl, user);
+  public save(user: Authorization) {
+    return this.http.post<Authorization>(this.usersUrl, user);
   }
 }
