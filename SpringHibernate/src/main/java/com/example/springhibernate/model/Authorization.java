@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import okhttp3.HttpUrl;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +18,7 @@ import java.util.List;
 public class Authorization implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -42,9 +42,7 @@ public class Authorization implements UserDetails {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    public static HttpUrl.Builder builder() {
-        return null;
-    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

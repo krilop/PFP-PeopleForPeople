@@ -2,7 +2,7 @@ package com.example.springhibernate.service.impl;
 
 import com.example.springhibernate.DTO.UserDTO;
 import com.example.springhibernate.model.UserData;
-import com.example.springhibernate.repository.AuthRepository;
+import com.example.springhibernate.repository.UserRepository;
 import com.example.springhibernate.repository.UserDataRepository;
 import com.example.springhibernate.service.UDService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,9 @@ import java.util.Optional;
 public class UserDataService implements UDService {
 
     private final UserDataRepository userDataRepository;
-    private final AuthRepository authRepository;
+    private final UserRepository authRepository;
     @Autowired
-    public UserDataService(UserDataRepository repository, AuthRepository authRepository) {
+    public UserDataService(UserDataRepository repository, UserRepository authRepository) {
         this.userDataRepository = repository;
         this.authRepository = authRepository;
     }

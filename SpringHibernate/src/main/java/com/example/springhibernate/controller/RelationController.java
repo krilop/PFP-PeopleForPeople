@@ -12,7 +12,7 @@ public class RelationController {
 
     private final RelationService relationService;
 
-    @PostMapping("/addNewRelationType")
+    @PostMapping("/relations/new")
     public ResponseEntity<?> createNewRelationType(@RequestParam("title") String title)
     {
         return relationService.createNewRelationType(title);

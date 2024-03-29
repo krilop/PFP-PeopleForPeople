@@ -1,7 +1,7 @@
 package com.example.springhibernate;
 
-import com.example.springhibernate.service.impl.AuthorizationService;
 import com.example.springhibernate.service.impl.JwtService;
+import com.example.springhibernate.service.impl.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public static final String BEARER_PREFIX = "Bearer ";
     public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
-    private final AuthorizationService userService;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(

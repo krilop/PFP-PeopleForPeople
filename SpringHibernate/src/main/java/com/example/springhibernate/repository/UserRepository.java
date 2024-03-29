@@ -7,9 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AuthRepository extends JpaRepository<Authorization, Long> {
+public interface UserRepository extends JpaRepository<Authorization, Long> {
     Authorization findAuthorizationByLoginOrEmailAndHashOfPass(String login, String email, String hashOfPass);
     Authorization findAuthorizationByLoginOrEmail(String login, String email);
+    Authorization findAuthorizationByLogin(String login);
 
     Optional<Authorization> findByLogin(String login);
     boolean existsByLogin(String login);
