@@ -33,36 +33,4 @@ public class AuthController {
         return authenticationService.signIn(request);
     }
 
-
-
-   /* @GetMapping("") // Убираем переменную пути из аннотации
-    public Authorization findAuthorization(@RequestParam("loginOrEmail") String loginOrEmail, @RequestParam("pass") String password) {
-        return authService.findAuthorizationByLoginOrEmail(loginOrEmail, loginOrEmail, password);
-    }*/
-/*
-    @PutMapping("/change")
-    public void updateAuthorization(@RequestParam("login") String login, @RequestParam("email") String email, @RequestParam("pass") String password) {
-        Authorization in = new Authorization();
-        in.setEmail(email);
-        in.setLogin(login);
-        in.setHashOfPass(password);
-        authService.updateAuthorization(in);
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity deleteAuthorization(@RequestParam("id") Long id) {
-        authService.deleteAuthorizationById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping("/registration")
-    public ResponseEntity createAuthorization(@RequestParam("login") String login, @RequestParam("email") String email, @RequestParam("pass") String password) {
-        Authorization in = new Authorization();
-        in.setLogin(login);
-        in.setEmail(email);
-        in.setHashOfPass(password);
-        in = authService.createAuthorization(in).getBody();
-        return ResponseEntity.status(HttpStatus.OK).body("/registration/"+in.getId());
-    }
-*/
 }

@@ -27,12 +27,6 @@ public class ContactController {
         return contactService.findAllContactsById(id);
     }
 
-    @GetMapping("/contacts/{id}")
-    public ResponseEntity<?> findAllContacts()
-    {
-        return contactService.findAllContacts();
-    }
-
     @PostMapping("/contacts/{userId}")
     public ResponseEntity<?> addContactToUser(@PathVariable("userId") Long userId, @Valid @RequestBody ContactDTO contactDTO) {
         Optional<UserData> userOptional = userDataService.findUserDataById(userId);

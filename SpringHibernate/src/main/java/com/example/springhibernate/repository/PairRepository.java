@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface PairRepository extends JpaRepository<Pair,Long> {
-    public boolean existsPairByAnotherIdAndUserId(UserData anotherId, UserData userId);
     public int countByUserId_IdAndAnotherId_Id(Long userId, Long anotherId);
 
     public Pair findByUserId_IdAndAnotherId_Id(Long userId, Long anotherId);

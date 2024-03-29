@@ -24,9 +24,6 @@ public class ContactService implements ContService {
         return new ResponseEntity<>(contactRepository.findContactsByUserDataId(id),HttpStatus.OK);
     }
 
-    public ResponseEntity<List<Contact>> findAllContacts(){
-        return new ResponseEntity<>(contactRepository.findAll(), HttpStatus.OK);
-    }
 
     public ResponseEntity<?> createContactForUser(Contact contact) {
         Contact savedContact = contactRepository.save(contact);
