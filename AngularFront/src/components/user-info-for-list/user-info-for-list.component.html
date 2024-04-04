@@ -1,0 +1,13 @@
+<div class="user-container">
+  <div class="user-info">
+    <div class="user-avatar">
+      <img [src]="user.media" alt="Avatar">
+    </div>
+    <div class="user-details">
+      <h2>{{ user.name }} {{ user.lastName }}</h2>
+      <p>{{ user.description }}</p>
+      <p>Возраст: {{ user.age }}</p>
+      <p>Пол: {{ user.gender ? 'Девочка' : 'Мальчик' }}</p>
+    </div>
+  </div>
+</div>

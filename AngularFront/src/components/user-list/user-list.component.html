@@ -1,0 +1,8 @@
+<div *ngIf="userList && userList.length">
+  <div *ngFor="let user of userList">
+    <app-user-info-for-list [user]="user"></app-user-info-for-list>
+  </div>
+</div>
+<div *ngIf="!userList || userList.length === 0">
+  <p>No users found.</p>
+</div>

@@ -1,0 +1,22 @@
+<div class="registration-container">
+  <h2>Register on PFP - People for People</h2>
+  <form (ngSubmit)="register()" #registrationForm="ngForm">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" [(ngModel)]="username" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" [(ngModel)]="email" required email>
+      <div *ngIf="registrationForm.controls.email.invalid && (registrationForm.controls.email.dirty || registrationForm.controls.email.touched)" class="text-danger">
+        <div *ngIf="registrationForm.controls.email.errors?.required">Email is required.</div>
+        <div *ngIf="registrationForm.controls.email.errors?.email">Invalid email format.</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" [(ngModel)]="password" required>
+    </div>
+    <button type="submit" [disabled]="registrationForm.invalid">Register</button>
+  </form>
+</div>
