@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/PFP")
+@CrossOrigin(origins = "http://localhost:4200",allowCredentials = "true")
 public class RelationController {
 
     private final RelationService relationService;
@@ -29,4 +30,11 @@ public class RelationController {
     {
         return relationService.findAllRelationsForUser(id);
     }
+
+    @GetMapping("/relations")
+    public ResponseEntity<?> findAllRelations()
+    {
+        return relationService.findAllRelations();
+    }
+
 }

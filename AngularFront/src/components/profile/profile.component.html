@@ -1,0 +1,18 @@
+<app-header/>
+<div class="user-container">
+  <div class="user-info">
+    <div class="user-avatar">
+      <img [src]="user.media" alt="Avatar">
+    </div>
+    <div class="user-details">
+      <h2>{{ user.name }} {{ user.lastName }}</h2>
+      <p>{{ user.description }}</p>
+      <p>Возраст: {{ user.age }}</p>
+      <p>Пол: {{ user.gender ? 'Мужской' : 'Женский' }}</p>
+    </div>
+  </div>
+  <div class="button-box" *ngIf="showEditButton">
+    <button (click)="navigateToReg2()">Отредактировать информацию</button>
+  </div>
+</div>
+<app-interest-profile/>

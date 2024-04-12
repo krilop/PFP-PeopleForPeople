@@ -1,0 +1,28 @@
+<div class="interests-container">
+  <h1>Выберите ваши интересы</h1>
+  <div class="interests">
+    <div class="interest" *ngFor="let interest of interests" (click)="addInterestToUser(interest.id)" (mouseover)="showInterestName(interest.titleOfType)" (mouseleave)="hideInterestName()">
+      <img [src]="interest.icon" alt="Interest" [title]="interest.titleOfType">
+    </div>
+  </div>
+</div>
+<div class="add-interest">
+  <h2>Не нашел своего интереса? ДОБАВЬ СВОЙ!</h2>
+  <form (ngSubmit)="addInterest()">
+    <div class="form-group">
+      <label for="imageUrl">Ссылка на изображение:</label>
+      <input type="text" id="imageUrl" name="imageUrl" [(ngModel)]="newInterest.icon" required>
+      <div class="interests">
+        <img [src]="newInterest.icon" alt="Interest Preview" class="interest">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="name">Название интереса:</label>
+      <input type="text" id="name" name="name" [(ngModel)]="newInterest.titleOfType" required>
+    </div>
+    <button type="submit" [disabled]="!newInterest.icon || !newInterest.titleOfType">Добавить интерес</button>
+  </form>
+</div>
+
+
+<button class="ready-btn" (click)="finish()">Готово</button>

@@ -43,6 +43,12 @@ public class RelationService implements RelService {
         return new ResponseEntity<>(relationTypeRepository.save(New), HttpStatus.CREATED);
     }
 
+    public ResponseEntity<?> findAllRelations()
+    {
+        return new ResponseEntity<>(relationTypeRepository.findAll(), HttpStatus.OK);
+    }
+
+    /** Данный метод ДОБАВЛЯЕТ новые отношения для пары, НО ТОЛЬКО С ОДНОЙ СТОРОНЫ **/
     @Transactional
     public ResponseEntity<?> createNewRelation(Long userId, Long anotherId, Long relationId)
     {

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,6 +31,16 @@ public class UserDataService implements UDService {
         Optional<UserData> userDataOptional = userDataRepository.findUserDataById(id);
         userDataOptional.get().setAge(Period.between(userDataOptional.get().getDateOfBirth(),LocalDate.now()).getYears());
         return userDataOptional;
+    }
+    @Override
+    public List<UserData> findAllUserData()
+    {
+        List<UserData> userDataList = userDataRepository.findAll();
+        for (UserData user:userDataList
+             ) {
+            user.setAge(Period.between(user.getDateOfBirth(),LocalDate.now()).getYears());
+        }
+        return userDataList;
     }
 
     @Override
