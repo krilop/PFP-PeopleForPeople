@@ -1,3 +1,4 @@
+<app-header/>
 <div class="user-container">
   <div class="user-info">
     <div class="user-avatar">
@@ -7,8 +8,11 @@
       <h2>{{ user.name }} {{ user.lastName }}</h2>
       <p>{{ user.description }}</p>
       <p>Возраст: {{ user.age }}</p>
-      <p>Пол: {{ !user.gender ? 'Женский' : 'Мужской' }}</p>
+      <p>Пол: {{ user.gender ? 'Мужской' : 'Женский' }}</p>
     </div>
   </div>
-  <button (click)="goToProfile(user.id)">Перейти на профиль пользователя</button>
+  <div class="button-box" *ngIf="showEditButton">
+    <button (click)="navigateToReg2()">Отредактировать информацию</button>
+  </div>
 </div>
+<app-interest-profile/>

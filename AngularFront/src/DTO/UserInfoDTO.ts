@@ -1,4 +1,5 @@
 export interface UserInfoDTO {
+  id: number;
   name: string;
   lastName: string;
   description: string;

@@ -9,6 +9,8 @@ import lombok.*;
 @Builder
 public class InterestDTO {
 
+    private Long id;
+
     private String titleOfType;
 
     private String icon;

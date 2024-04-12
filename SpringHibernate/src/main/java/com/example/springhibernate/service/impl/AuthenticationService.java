@@ -55,7 +55,7 @@ public class AuthenticationService implements UserDetailsService {
                 request.getUsername(),
                 request.getPassword()
         ));
-
+        logger.info("username:"+request.getUsername()+"pass:"+request.getPassword());
         var user = userService
                 .userDetailsService()
                 .loadUserByUsername(request.getUsername());

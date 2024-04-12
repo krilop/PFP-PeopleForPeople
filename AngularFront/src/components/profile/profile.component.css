@@ -1,0 +1,44 @@
+/* profile.component.css */
+
+.user-container {
+  margin: 20px;
+  margin-top: 70px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  margin-right: 20px;
+}
+
+.user-avatar img {
+  width: 100px; /* Размер аватара */
+  height: 100px;
+  border-radius: 50%; /* Закругленные края */
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1.2em;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: auto;
+}
+.button-box
+{
+  display: flex;
+  width: 100%;
+}
+button:hover {
+  background-color: #0056b3;
+}

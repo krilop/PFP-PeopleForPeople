@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/PFP/")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200",allowCredentials = "true")
 public class UserDataController {
 
     private final UserDataService infoService;

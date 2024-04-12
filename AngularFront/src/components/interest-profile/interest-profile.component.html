@@ -1,0 +1,9 @@
+<div class="interests-container">
+  <h1>Интересы пользователя</h1>
+  <div class="interests">
+    <div class="interest" *ngFor="let interest of interests">
+      <img [src]="interest.icon" alt="Interest" [title]="interest.titleOfType">
+      <p>{{ interest.titleOfType }}</p>
+    </div>
+  </div>
+</div>

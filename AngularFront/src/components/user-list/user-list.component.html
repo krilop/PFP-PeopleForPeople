@@ -1,8 +1,11 @@
-<div *ngIf="userList && userList.length">
+<app-header/>
+<div *ngIf="userList && userList.length" style="margin-top: 75px">
   <div *ngFor="let user of userList">
-    <app-user-info-for-list [user]="user"></app-user-info-for-list>
+    <ng-container *ngIf="user.id !== +id">
+      <app-user-info-for-list [user]="user"></app-user-info-for-list>
+    </ng-container>
   </div>
 </div>
-<div *ngIf="!userList || userList.length === 0">
+<div *ngIf="!userList || userList.length === 0" style="margin-top: 80px">
   <p>No users found.</p>
 </div>

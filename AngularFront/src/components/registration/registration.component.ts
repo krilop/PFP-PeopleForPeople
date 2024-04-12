@@ -29,7 +29,7 @@ export class RegistrationComponent {
             // Сохраняем токен в локальное хранилище
             localStorage.setItem('jwtToken', response.token);
             // Перенаправляем пользователя на другую страницу
-            this.router.navigate(['/some-page']); // Указывайте путь к нужной странице
+            this.router.navigate(['/registration/part2']); // Указывайте путь к нужной странице
           }
         },
         error => {

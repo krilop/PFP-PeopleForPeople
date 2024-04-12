@@ -1,0 +1,39 @@
+<form (ngSubmit)="onSubmit()" class="form-container">
+  <div class="form-table">
+    <div class="form-group">
+      <label for="name">Имя</label>
+      <input type="text" id="name" name="name" [(ngModel)]="user.name" required>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Фамилия</label>
+      <input type="text" id="lastName" name="lastName" [(ngModel)]="user.lastName" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Описание</label>
+      <textarea id="description" name="description" [(ngModel)]="user.description"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="dateOfBirth">Дата рождения</label>
+      <input type="date" id="dateOfBirth" name="dateOfBirth" [(ngModel)]="user.dateOfBirth" required>
+    </div>
+    <div class="form-group">
+      <label for="gender">Пол</label>
+      <select id="gender" name="gender" [(ngModel)]="user.gender" required>
+        <option value="" disabled selected>Выберите пол</option>
+        <option value="male">Мужской</option>
+        <option value="female">Женский</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="imageLink">Ссылка на изображение</label>
+      <input type="text" id="imageLink" name="imageLink" [(ngModel)]="user.media" required>
+    </div>
+    <div class="form-group">
+      <button type="button" (click)="previewImage()">Предпросмотр</button>
+    </div>
+    <div class="form-group">
+      <img *ngIf="user.media" [src]="user.media" alt="Preview">
+    </div>
+    <button type="submit">Сохранить</button>
+  </div>
+</form>
