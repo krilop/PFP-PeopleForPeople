@@ -1,0 +1,107 @@
+.interests-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.interests-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.interests {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.interest {
+    margin: 10px;
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+}
+
+.interest img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.interest:hover {
+    border-color: #007bff;
+    transform: scale(1.1);
+}
+
+.add-interest {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.add-interest h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.add-interest .form-group {
+    margin-bottom: 20px;
+}
+
+.add-interest label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.add-interest input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.add-interest .interest {
+    width: 100px;
+    margin-top: 10px;
+    display: block;
+}
+
+.add-interest button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-interest button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.add-interest button:hover {
+    background-color: #0056b3;
+}
+
+.ready-btn {
+    margin-left: 66.666%;
+    margin-top: 30px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ready-btn:hover {
+    background-color: #0056b3;
+}
+

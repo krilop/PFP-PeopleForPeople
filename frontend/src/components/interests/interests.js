@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InterestsService from '../../services/interestService'; // Подключаем сервис для работы с интересами
 
+import './interests.css'
 function InterestsComponent() {
     const [interests, setInterests] = useState([]); // Состояние для списка интересов
     const [newInterest, setNewInterest] = useState({ icon: '', titleOfType: '' }); // Состояние для нового интереса
@@ -15,26 +16,45 @@ function InterestsComponent() {
     }, []);
 
     // Функция для получения списка интересов
-    const getInterests = () => {
-        InterestsService.getInterestsForUser()
-            .then(interests => {
-                setInterests(interests);
-            })
-            .catch(error => {
-                console.error('Error fetching interests:', error);
-            });
+    const getInterests = async () => {
+        try {
+            const interests = await InterestsService.getInterestsForUser();
+            setInterests(interests);
+        } catch (error) {
+            console.error('Error fetching interests:', error);
+        }
     };
 
     // Функция для добавления интереса к пользователю
-    const addInterestToUser = (interestId) => {
+    const addInterestToUser = async (interestId) => {
         console.log('Adding interest with ID:', interestId);
-        InterestsService.addInterestForUser(interestId)
-            .then(response => {
-                console.log('Interest added successfully:', response);
-            })
-            .catch(error => {
-                console.error('Error adding interest:', error);
-            });
+        try {
+            const response = await InterestsService.addInterestForUser(interestId);
+
+            console.log('Interest added successfully:', response);
+        } catch (error) {
+            console.error('Error adding interest:', error);
+        }
+    };
+
+    // Функция для добавления нового интереса
+    const addInterest = async (event) => {
+        event.preventDefault();
+        console.log('Adding new interest:', newInterest);
+        try {
+            const response = await InterestsService.saveInterest(newInterest);
+            console.log('New interest added successfully:', response);
+            alert('New interest added successfully');
+            setNewInterest({ icon: '', titleOfType: '' }); // Очищаем поля после успешного добавления интереса
+        } catch (error) {
+            console.error('Error adding new interest:', error);
+        }
+    };
+
+    // Функция для завершения процесса выбора интересов
+    const finish = () => {
+        const id = localStorage.getItem('id');
+        navigate(`/profile/${id}`);
     };
 
     // Функция для отображения названия интереса при наведении
@@ -46,26 +66,6 @@ function InterestsComponent() {
     // Функция для скрытия названия интереса
     const hideInterestName = () => {
         setShowInterest(false);
-    };
-
-    // Функция для добавления нового интереса
-    const addInterest = (event) => {
-        event.preventDefault();
-        console.log('Adding new interest:', newInterest);
-        InterestsService.saveInterest(newInterest)
-            .then(response => {
-                console.log('New interest added successfully:', response);
-                alert('New interest added successfully');
-                setNewInterest({ icon: '', titleOfType: '' }); // Очищаем поля после успешного добавления интереса
-            })
-            .catch(error => {
-                console.error('Error adding new interest:', error);
-            });
-    };
-
-    // Функция для завершения процесса выбора интересов
-    const finish = () => {
-        navigate('/profile');
     };
 
     return (
