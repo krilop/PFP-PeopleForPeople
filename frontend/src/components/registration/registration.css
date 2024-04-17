@@ -1,0 +1,51 @@
+
+.registration-container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 300px;
+    padding: 10px;
+    font-size: 1em;
+}
+
+.text-danger {
+    color: red;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

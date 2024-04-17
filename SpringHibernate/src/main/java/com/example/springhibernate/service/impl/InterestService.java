@@ -85,8 +85,6 @@ public class InterestService implements InterService {
 
     public ResponseEntity<List<Interest>> findAllInterestsForUser(Long id) {
         UserData user = userDataRepository.findUserDataById(id).get();
-        if(user.getInterests().isEmpty())
-            return new ResponseEntity<List<Interest>>( HttpStatus.NO_CONTENT);
         List<Interest> listOfInterest = findAllInterests().getBody();
         listOfInterest.removeAll(user.getInterests());
         return new ResponseEntity<List<Interest>>(listOfInterest, HttpStatus.OK);
