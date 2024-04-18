@@ -1,22 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import InterestsService from '../../services/interestService'; // Подключаем сервис для работы с интересами
+import InterestsService from '../../services/interestService'; // Service for handling interests
 
-import './interests.css'
+import './interests.css';
 
 function InterestsComponent() {
-    const [interests, setInterests] = useState([]); // Состояние для списка интересов
-    const [newInterest, setNewInterest] = useState({icon: '', titleOfType: ''}); // Состояние для нового интереса
-    const [showInterest, setShowInterest] = useState(false); // Состояние для отображения названия интереса при наведении
-    const [hoveredInterestName, setHoveredInterestName] = useState(''); // Состояние для названия интереса, над которым находится курсор
-
+    const [interests, setInterests] = useState([]);
+    const [newInterest, setNewInterest] = useState({icon: '', titleOfType: ''});
     const navigate = useNavigate();
 
     useEffect(() => {
-        getInterests(); // Получаем список интересов при загрузке компонента
+        getInterests(); // Fetch the list of interests on component mount
     }, []);
 
-    // Функция для получения списка интересов
     const getInterests = async () => {
         try {
             const interests = await InterestsService.getInterestsForUser();
@@ -26,47 +22,33 @@ function InterestsComponent() {
         }
     };
 
-    // Функция для добавления интереса к пользователю
     const addInterestToUser = async (interestId) => {
         console.log('Adding interest with ID:', interestId);
         try {
-            const response = await InterestsService.addInterestForUser(interestId);
-
-            console.log('Interest added successfully:', response);
+            await InterestsService.addInterestForUser(interestId);
+            // Remove the interest from the list
+            setInterests(interests.filter(interest => interest.id !== interestId));
         } catch (error) {
             console.error('Error adding interest:', error);
         }
     };
 
-    // Функция для добавления нового интереса
     const addInterest = async (event) => {
         event.preventDefault();
         console.log('Adding new interest:', newInterest);
         try {
-            const response = await InterestsService.saveInterest(newInterest);
-            console.log('New interest added successfully:', response);
+            await InterestsService.saveInterest(newInterest);
             alert('New interest added successfully');
-            setNewInterest({icon: '', titleOfType: ''}); // Очищаем поля после успешного добавления интереса
+            setNewInterest({icon: '', titleOfType: ''}); // Clear fields after adding
+            getInterests(); // Reload interests list
         } catch (error) {
             console.error('Error adding new interest:', error);
         }
     };
 
-    // Функция для завершения процесса выбора интересов
     const finish = () => {
         const id = localStorage.getItem('id');
         navigate(`/profile/${id}`);
-    };
-
-    // Функция для отображения названия интереса при наведении
-    const showInterestName = (name) => {
-        setHoveredInterestName(name);
-        setShowInterest(true);
-    };
-
-    // Функция для скрытия названия интереса
-    const hideInterestName = () => {
-        setShowInterest(false);
     };
 
     return (
@@ -78,14 +60,11 @@ function InterestsComponent() {
                         key={interest.id}
                         className="interest"
                         onClick={() => addInterestToUser(interest.id)}
-                        onMouseOver={() => showInterestName(interest.titleOfType)}
-                        onMouseLeave={hideInterestName}
                     >
                         <img src={interest.icon} alt="Interest" title={interest.titleOfType}/>
                     </div>
                 ))}
             </div>
-
             <div className="add-interest">
                 <h2>Не нашел своего интереса? ДОБАВЬ СВОЙ!</h2>
                 <form onSubmit={addInterest}>
@@ -115,17 +94,13 @@ function InterestsComponent() {
                                     required
                                 /></label>
                         </div>
-                        <button type="submit" disabled={!newInterest.icon || !newInterest.titleOfType}>Добавить
-                            интерес
-                        </button>
+                        <button type="submit" disabled={!newInterest.icon || !newInterest.titleOfType}>Добавить интерес</button>
                     </div>
                 </form>
-
+            </div>
+            <button className="ready-btn" onClick={finish}>Готово</button>
         </div>
-    <button className="ready-btn" onClick={finish}>Готово</button>
-</div>
-)
-    ;
+    );
 }
 
 export default InterestsComponent;

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/PFP")
-@CrossOrigin(origins = "http://localhost:4200",allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:4200","http://localhost:3000"} ,allowCredentials = "true")
 public class RelationController {
 
     private final RelationService relationService;

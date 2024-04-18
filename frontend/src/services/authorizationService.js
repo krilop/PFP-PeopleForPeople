@@ -23,6 +23,8 @@ class AuthorizationService {
             const response = await axios.post(`${this.apiUrl}/sign-up`, {username, email, password});
             // Сохраняем токен в локальное хранилище
             localStorage.setItem('token', response.data.token);
+            const decodedToken = jwtDecode(response.data.token);
+            localStorage.setItem('id', decodedToken.id);
             return response.data;
         } catch (error) {
             throw error;

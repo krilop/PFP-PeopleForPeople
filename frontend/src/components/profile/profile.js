@@ -24,6 +24,7 @@ function ProfileComponent() {
                 const userData = await UserService.getUser(userId);
                 console.log('User data received:', userData); // Log user data for debugging
                 setUser(userData.data); // Set user data in state
+                localStorage.setItem('gender', userData.data.gender)
             } catch (err) {
                 console.error('Error fetching user:', err);
                 // Handle error - display error message or redirect
@@ -35,7 +36,7 @@ function ProfileComponent() {
 
 
     const navigateToEditProfile = () => {
-        navigate(`/registration/part2`); // Navigate to edit profile page with current user ID
+        navigate(`/change`); // Navigate to edit profile page with current user ID
     };
 
     if (!user) return <div>Error: Failed to load user data.</div>; // Display error message if user data is null or loading failed
@@ -52,7 +53,7 @@ function ProfileComponent() {
                         <h2>{user.name} {user.lastName}</h2>
                         <p>{user.description}</p>
                         <p>Age: {user.age}</p>
-                        <p>Gender: {user.gender ? 'Male' : 'Female'}</p>
+                        <p>Gender: {user.gender ? 'male' : 'female'}</p>
                     </div>
                 </div>
                 {showEditButton && (
