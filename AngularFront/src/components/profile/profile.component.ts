@@ -67,7 +67,7 @@ export class ProfileComponent {
   }
 
   navigateToReg2(): void {
-    this.router.navigateByUrl('registration/part2');
+    this.router.navigateByUrl('change',this.user);
   }
 }
 

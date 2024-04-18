@@ -37,7 +37,8 @@ button {
 .button-box
 {
     display: flex;
-    width: 100%;
+    flex-direction: row;
+    width: 10%;
 }
 button:hover {
     background-color: #0056b3;

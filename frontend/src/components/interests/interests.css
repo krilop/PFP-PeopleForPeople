@@ -93,6 +93,7 @@
     margin-top: 30px;
     padding: 10px 20px;
     font-size: 18px;
+    width: 100px;
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -105,3 +106,8 @@
     background-color: #0056b3;
 }
 
+.form-table {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto; /* Установите автоматичесные отступы по бокам */
+}

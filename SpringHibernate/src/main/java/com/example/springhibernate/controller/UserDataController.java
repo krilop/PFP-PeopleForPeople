@@ -6,7 +6,6 @@ import com.example.springhibernate.service.impl.UserDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,18 +20,10 @@ public class UserDataController {
 
     private final UserDataService infoService;
     @PostMapping("profile/{id}/change")
-    public ResponseEntity<String> createUserData(@Valid @RequestBody UserDTO newUser, @PathVariable("id") Long id) {
+    public ResponseEntity<UserData> createUserData(@Valid @RequestBody UserDTO newUser, @PathVariable("id") Long id) {
         newUser.setId(id);
         ResponseEntity<UserData> responseEntity = infoService.createUserDataById(newUser);
-        HttpStatusCode statusCode = responseEntity.getStatusCode();
-        if (statusCode.is2xxSuccessful()) {
-            UserData userData = responseEntity.getBody();
-            Long userId = userData.getId();
-            String redirectUrl = "/profile/" + userId;
-            return ResponseEntity.status(statusCode).body(redirectUrl);
-        } else {
-            return ResponseEntity.status(statusCode).build();
-        }
+        return responseEntity;
     }
 
     @GetMapping("profile/{id}/info")
@@ -45,5 +36,11 @@ public class UserDataController {
     public ResponseEntity<List<UserData>> findAllUserData()
     {
         return new ResponseEntity<>(infoService.findAllUserData(), HttpStatus.OK);
+    }
+
+    @PutMapping("profile/{id}/change")
+    public ResponseEntity<UserData> changeUserData(@Valid @RequestBody UserDTO newUser,@PathVariable("id")Long id)
+    {
+        return infoService.changeUserData(newUser,id);
     }
 }

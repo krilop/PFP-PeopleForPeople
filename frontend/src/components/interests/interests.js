@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import InterestsService from '../../services/interestService'; // Подключаем сервис для работы с интересами
 
 import './interests.css'
+
 function InterestsComponent() {
     const [interests, setInterests] = useState([]); // Состояние для списка интересов
-    const [newInterest, setNewInterest] = useState({ icon: '', titleOfType: '' }); // Состояние для нового интереса
+    const [newInterest, setNewInterest] = useState({icon: '', titleOfType: ''}); // Состояние для нового интереса
     const [showInterest, setShowInterest] = useState(false); // Состояние для отображения названия интереса при наведении
     const [hoveredInterestName, setHoveredInterestName] = useState(''); // Состояние для названия интереса, над которым находится курсор
 
@@ -45,7 +46,7 @@ function InterestsComponent() {
             const response = await InterestsService.saveInterest(newInterest);
             console.log('New interest added successfully:', response);
             alert('New interest added successfully');
-            setNewInterest({ icon: '', titleOfType: '' }); // Очищаем поля после успешного добавления интереса
+            setNewInterest({icon: '', titleOfType: ''}); // Очищаем поля после успешного добавления интереса
         } catch (error) {
             console.error('Error adding new interest:', error);
         }
@@ -80,7 +81,7 @@ function InterestsComponent() {
                         onMouseOver={() => showInterestName(interest.titleOfType)}
                         onMouseLeave={hideInterestName}
                     >
-                        <img src={interest.icon} alt="Interest" title={interest.titleOfType} />
+                        <img src={interest.icon} alt="Interest" title={interest.titleOfType}/>
                     </div>
                 ))}
             </div>
@@ -88,38 +89,43 @@ function InterestsComponent() {
             <div className="add-interest">
                 <h2>Не нашел своего интереса? ДОБАВЬ СВОЙ!</h2>
                 <form onSubmit={addInterest}>
-                    <div className="form-group">
-                        <label htmlFor="imageUrl">Ссылка на изображение:</label>
-                        <input
-                            type="text"
-                            id="imageUrl"
-                            name="imageUrl"
-                            value={newInterest.icon}
-                            onChange={(e) => setNewInterest({ ...newInterest, icon: e.target.value })}
-                            required
-                        />
-                        <div className="interests">
-                            <img src={newInterest.icon} alt="Interest Preview" className="interest" />
+                    <div className="form-table">
+                        <div className="form-group">
+                            <label htmlFor="imageUrl">Ссылка на изображение:<br/>
+                                <input
+                                    type="text"
+                                    id="imageUrl"
+                                    name="imageUrl"
+                                    value={newInterest.icon}
+                                    onChange={(e) => setNewInterest({...newInterest, icon: e.target.value})}
+                                    required
+                                /></label>
+                            <div className="interests">
+                                <img src={newInterest.icon} alt="Interest Preview" className="interest"/>
+                            </div>
                         </div>
+                        <div className="form-group">
+                            <label htmlFor="name">Название интереса:<br/>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    value={newInterest.titleOfType}
+                                    onChange={(e) => setNewInterest({...newInterest, titleOfType: e.target.value})}
+                                    required
+                                /></label>
+                        </div>
+                        <button type="submit" disabled={!newInterest.icon || !newInterest.titleOfType}>Добавить
+                            интерес
+                        </button>
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="name">Название интереса:</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={newInterest.titleOfType}
-                            onChange={(e) => setNewInterest({ ...newInterest, titleOfType: e.target.value })}
-                            required
-                        />
-                    </div>
-                    <button type="submit" disabled={!newInterest.icon || !newInterest.titleOfType}>Добавить интерес</button>
                 </form>
-            </div>
 
-            <button className="ready-btn" onClick={finish}>Готово</button>
         </div>
-    );
+    <button className="ready-btn" onClick={finish}>Готово</button>
+</div>
+)
+    ;
 }
 
 export default InterestsComponent;

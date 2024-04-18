@@ -7,12 +7,13 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {CommonModule} from '@angular/common';
 import {PostUserInfoComponent} from "../components/post-user-info/post-user-info.component";
 import {InterestsComponent} from "../components/interests/interests.component";
-import {InterestProfileComponent} from "../components/interest-profile/interest-profile.component";  // Import CommonModule
+import {InterestProfileComponent} from "../components/interest-profile/interest-profile.component";
+import {ChangeUserInfoComponent} from "../components/change-user-info/change-user-info.component";  // Import CommonModule
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AuthorizationComponent, WelcomeInformationComponent, PostUserInfoComponent, FormsModule, HttpClientModule, CommonModule, InterestsComponent, InterestProfileComponent],
+  imports: [RouterOutlet, AuthorizationComponent, WelcomeInformationComponent, PostUserInfoComponent, FormsModule, HttpClientModule, CommonModule, InterestsComponent, InterestProfileComponent, ChangeUserInfoComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -41,7 +41,7 @@ export class PostUserInfoComponent {
     this.userService.saveUser(this.user).subscribe(
       (response) => {
         console.log('User saved successfully:', response);
-        this.router.navigateByUrl('/profile');
+        this.router.navigateByUrl(`/profile/${localStorage.getItem('id')}`);
       },
       (error) => {
         console.error('Error saving user:', error);

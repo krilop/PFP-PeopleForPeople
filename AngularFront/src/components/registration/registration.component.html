@@ -8,9 +8,8 @@
     <div class="form-group">
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" [(ngModel)]="email" required email>
-      <div *ngIf="registrationForm.controls.email.invalid && (registrationForm.controls.email.dirty || registrationForm.controls.email.touched)" class="text-danger">
-        <div *ngIf="registrationForm.controls.email.errors?.required">Email is required.</div>
-        <div *ngIf="registrationForm.controls.email.errors?.email">Invalid email format.</div>
+      <div *ngIf="registrationForm.controls['email']?.invalid && (registrationForm.controls['email'].dirty || registrationForm.controls['email'].touched)" class="text-danger">
+        {{ getEmailErrorMessage() }}
       </div>
     </div>
     <div class="form-group">

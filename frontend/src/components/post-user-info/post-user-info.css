@@ -23,6 +23,7 @@ label {
 
 input[type="text"],
 select {
+    width: calc(100% - 20px);
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
@@ -30,14 +31,19 @@ select {
 }
 textarea
 {
+    width: calc(100% - 20px);
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
 
+select {
+    width: 100%;
+}
 
 button {
+    width: 100%;
     padding: 10px 20px;
     font-size: 16px;
     background-color: #007bff;
