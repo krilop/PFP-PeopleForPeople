@@ -1,7 +1,7 @@
 <div class="interests-container">
   <h1>Выберите ваши интересы</h1>
   <div class="interests">
-    <div class="interest" *ngFor="let interest of interests" (click)="addInterestToUser(interest.id)" (mouseover)="showInterestName(interest.titleOfType)" (mouseleave)="hideInterestName()">
+    <div class="interest" *ngFor="let interest of interests" (click)="removeInterest(interest.id); addInterestToUser(interest.id)" (mouseover)="showInterestName(interest.titleOfType)" (mouseleave)="hideInterestName()">
       <img [src]="interest.icon" alt="Interest" [title]="interest.titleOfType">
     </div>
   </div>

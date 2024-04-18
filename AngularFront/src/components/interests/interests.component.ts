@@ -56,8 +56,11 @@ export class InterestsComponent implements OnInit {
        alert('New interest added successfully');
      });
   }
+  removeInterest(interestId: number): void {
+    this.interests = this.interests.filter(interest => interest.id !== interestId);
+  }
 
   finish(): void {
-    this.router.navigate(['/profile']);
+    this.router.navigate([`/profile/${localStorage.getItem('id')}`]);
   }
 }

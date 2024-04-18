@@ -1,7 +1,7 @@
-<div class="user-container">
+<div class="user-container" *ngIf="user">
   <div class="user-info">
     <div class="user-avatar">
-      <img [src]="user.media" alt="Avatar">
+      <img [src]="user.media" alt="Avatar" (error)="handleImageError($event)">
     </div>
     <div class="user-details">
       <h2>{{ user.name }} {{ user.lastName }}</h2>

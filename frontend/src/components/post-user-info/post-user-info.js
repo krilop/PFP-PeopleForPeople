@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import UserService from '../../services/userService';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import './post-user-info.css'
+import './post-user-info.css';
+
 function PostUserInfoComponent() {
     const [user, setUser] = useState({
         id: 0,
@@ -15,27 +16,25 @@ function PostUserInfoComponent() {
     });
     const history = useNavigate();
 
-    const onSubmit = () => {
+    const onSubmit = async (e) => {
+        e.preventDefault(); // Prevent default form submission
+
         const newUser = { ...user };
-        if (newUser.gender === 'male') {
-            newUser.gender = true;
-        } else {
-            newUser.gender = false;
+
+        newUser.gender = newUser.gender === 'male';
+
+        newUser.id = localStorage.getItem('id');
+
+        newUser.dateOfBirth = new Date(newUser.dateOfBirth).toISOString().slice(0, 10);
+
+        try {
+            const response = await UserService.saveUser(newUser);
+            console.log('User saved successfully:', response);
+            history(`/profile/${localStorage.getItem('id')}`);
+        } catch (error) {
+            console.error('Error saving user:', error);
         }
-        newUser.id =localStorage.getItem('id');
-        const dateObject = new Date(newUser.dateOfBirth);
-        newUser.dateOfBirth = dateObject.toISOString().slice(0, 10);
-
-        UserService.saveUser(newUser)
-            .then(response => {
-                console.log('User saved successfully:', response);
-                history(`/profile/${localStorage.getItem('id')}`);
-            })
-            .catch(error => {
-                console.error('Error saving user:', error);
-            });
     };
-
     const previewImage = () => {
         setUser({ ...user, media: user.imageLink });
     };

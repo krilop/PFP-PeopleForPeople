@@ -10,23 +10,25 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Тень */
 }
 
-nav ul {
+header nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-nav ul li {
+header nav ul li {
     display: inline;
     margin-right: 20px;
 }
 
-nav ul li a {
+header nav ul li a {
     color: #fff;
     text-decoration: none;
 }
-
-nav ul li a:hover {
+header button{
+    width: 5%;
+}
+header nav ul li a:hover {
     text-decoration: underline;
 }
 

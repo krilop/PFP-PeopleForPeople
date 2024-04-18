@@ -57,6 +57,7 @@ public class UserDataService implements UDService {
         userData.setDescription(in.getDescription());
         userData.setLastName(in.getLastName());
         userData = userDataRepository.save(userData);
+        userData.setAuthorization(authRepository.findById(in.getId()).get());
         return new ResponseEntity<>(userData, HttpStatus.OK);
     }
 
@@ -71,5 +72,28 @@ public class UserDataService implements UDService {
     }
 
 
+    public ResponseEntity<UserData> changeUserData(UserDTO in, Long id) {
+        if (in.getId() == null || !authRepository.existsById(in.getId())) {
+            return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
+        }
+        try{
+            Optional<UserData> userData = findUserDataById(id);
+            UserData user = userData.get();
+            user.setId(id);
+            user.setName(in.getName().isBlank() ? user.getName() : in.getName());
+            user.setMedia(in.getMedia().isBlank() ? user.getMedia() : in.getMedia());
+            user.setGender(in.isGender() ? 1 : 0);
+            user.setDateOfBirth(in.getDateOfBirth() != null ? in.getDateOfBirth() : user.getDateOfBirth());
+            user.setDescription(in.getDescription().isBlank() ? user.getDescription() : in.getDescription());
+            user.setLastName(in.getLastName().isBlank() ? user.getLastName() : in.getLastName());
+            user.setAuthorization(authRepository.findById(in.getId()).get());
+            user = userDataRepository.save(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
 
 }

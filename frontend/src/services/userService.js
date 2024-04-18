@@ -47,6 +47,21 @@ const UserService = {
         } catch (error) {
             throw error;  // Здесь можно обработать ошибку
         }
+    },
+    async changeUser(user){
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('id');
+        try {
+            return await axios.put(`${apiUrl}/profile/${userId}/change`, user, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            throw error;  // Здесь можно обработать ошибку
+        }
     }
 };
 

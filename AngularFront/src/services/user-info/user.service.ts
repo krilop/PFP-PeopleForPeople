@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {UserInfoDTO} from "../../DTO/UserInfoDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +19,8 @@ export class UserService {
   }
   saveUser(user: any) {
     return this.http.post<any>(`${this.apiUrl}/profile/${localStorage.getItem('id')}/change`, user);
+  }
+  changeUser(user:any){
+    return this.http.put<any>(`${this.apiUrl}/profile/${localStorage.getItem('id')}/change`, user);
   }
 }

@@ -9,6 +9,7 @@ import RegistrationComponent from "./registration/registration";
 import ProfileComponent from "./profile/profile";
 import PostUserInfoComponent from "./post-user-info/post-user-info";
 import InterestsComponent from "./interests/interests";
+import ChangeUserInfoComponent from "./change-user-info/change-user-info";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                   <Route path="/profile/:id" element={<ProfileComponent />} />
                   <Route path="/registration/part2" element={<PostUserInfoComponent/>} />
                   <Route path="/interests" element={<InterestsComponent/>} />
+                  <Route path="/change" element={<ChangeUserInfoComponent/>} />
               </Routes>
           </div>
       </BrowserRouter>

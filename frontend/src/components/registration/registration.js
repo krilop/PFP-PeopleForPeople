@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import AuthorizationService from '../../services/authorizationService';
 import './registration.css'
 import {useNavigate} from "react-router-dom";
+
 function RegistrationComponent() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -23,21 +24,29 @@ function RegistrationComponent() {
             <h2>Register on PFP - People for People</h2>
             <form onSubmit={register}>
                 <div className="form-group">
-                    <label htmlFor="username">Username:</label>
-                    <input type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                    <label htmlFor="username">Username:
+                        <input type="text" id="username" name="username" value={username}
+                               onChange={(e) => setUsername(e.target.value)} required/>
+                    </label>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <label htmlFor="email">Email:
+                    <input type="email" id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                           required/>
                     {email && !/\S+@\S+\.\S+/.test(email) && (
                         <div className="text-danger">Invalid email format.</div>
                     )}
+                    </label>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <label htmlFor="password">Password:
+                    <input type="password" id="password" name="password" value={password}
+                           onChange={(e) => setPassword(e.target.value)} required/>
+                    </label>
                 </div>
-                <button type="submit" disabled={!username || !email || !password || !/\S+@\S+\.\S+/.test(email)}>Register</button>
+                <button type="submit"
+                        disabled={!username || !email || !password || !/\S+@\S+\.\S+/.test(email)}>Register
+                </button>
             </form>
         </div>
     );

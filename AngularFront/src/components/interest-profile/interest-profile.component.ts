@@ -18,17 +18,13 @@ export class InterestProfileComponent implements OnInit {
   constructor(private interestsService: InterestsService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    // Получаем id пользователя из параметров маршрута
     this.route.params.subscribe(params => {
       this.userId = params['id'];
-      // Вы можете использовать полученный userId здесь для загрузки интересов этого пользователя
       this.getInterests();
     });
   }
 
   getInterests(): void {
-    // Здесь используйте userId для загрузки интересов этого пользователя
-    // Например, вызовите метод interestsService.getInterestsOfUser(userId)
     this.interestsService.getInterestsOfUser(this.userId).subscribe(interests => {
       this.interests = interests;
     });

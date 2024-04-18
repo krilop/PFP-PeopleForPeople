@@ -6,6 +6,7 @@ import {UserListComponent} from "../components/user-list/user-list.component";
 import {ProfileComponent} from "../components/profile/profile.component";
 import {PostUserInfoComponent} from "../components/post-user-info/post-user-info.component";
 import {InterestsComponent} from "../components/interests/interests.component";
+import {ChangeUserInfoComponent} from "../components/change-user-info/change-user-info.component";
 
 export const routes: Routes = [
   {
@@ -42,6 +43,11 @@ export const routes: Routes = [
     path: 'registration/part2',
     title: 'Give some info about you',
     component: PostUserInfoComponent
+  },
+  {
+    path: 'change',
+    title: 'Give some info about you',
+    component: ChangeUserInfoComponent
   },
   {
     path: 'interests',

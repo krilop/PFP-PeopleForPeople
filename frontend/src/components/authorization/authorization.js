@@ -27,16 +27,19 @@ function AuthorizationComponent() {
         <div className="auth-container">
             <h2>Authorization</h2>
             <form onSubmit={handleLogin}> {/* Bind the form submission to handleLogin */}
-                <label>
-                    Username:
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-                </label>
-                <br />
+                <div className="form-group">
+                    <label>
+                        Username:
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                    </label>
+                </div>
+
+                <div className="form-group">
                 <label>
                     Password:
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </label>
-                <br />
+                </div>
                 <button type="submit">Login</button>
             </form>
             {errorMessage && <p>{errorMessage}</p>}
